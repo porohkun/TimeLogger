@@ -46,6 +46,8 @@ namespace WixSharpSetup
 					SourceFiles.Where(f => f.HaveAction(SFAct.Install)).Select(f => new File(f.FullPath) as WixEntity).ToArray())
 				);
 
+			project.OutFileName = "TimeLoggerSetup";
+
 			var versionFile = SourceFiles.FirstOrDefault(f => f.HaveAction(SFAct.Version));
 			if (versionFile == null)
 			{
