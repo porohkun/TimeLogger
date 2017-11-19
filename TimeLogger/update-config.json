@@ -1,0 +1,41 @@
+﻿{
+  "version": "1.1.0.0",
+  "files": [
+    {
+      "name": "TimeLogger.exe",
+      "url": "https://porohkun.github.io/TimeLogger/TimeLogger.exe",
+      "path": "",
+      "action": "replace"
+    },
+    {
+      "name": "MimiJson.dll",
+      "url": "https://porohkun.github.io/TimeLogger/MimiJson.dll",
+      "path": "",
+      "action": "replace"
+    },
+    {
+      "name": "System.Windows.Controls.Input.Toolkit.dll",
+      "url": "https://porohkun.github.io/TimeLogger/System.Windows.Controls.Input.Toolkit.dll",
+      "path": "",
+      "action": "replace"
+    },
+    {
+      "name": "System.Windows.Controls.Layout.Toolkit.dll",
+      "url": "https://porohkun.github.io/TimeLogger/System.Windows.Controls.Layout.Toolkit.dll",
+      "path": "",
+      "action": "replace"
+    },
+    {
+      "name": "WPFToolkit.dll",
+      "url": "https://porohkun.github.io/TimeLogger/WPFToolkit.dll",
+      "path": "",
+      "action": "replace"
+    },
+    {
+      "name": "Installer.exe",
+      "url": "https://porohkun.github.io/TimeLogger/Installer.exe",
+      "path": "",
+      "action": "misc"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+﻿<Window x:Class="TimeLogger.SetNameWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TimeLogger"
+        mc:Ignorable="d"
+        Title="New Task" Height="150" Width="300" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="23"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Column="1" Grid.Row="1" Text="ID:" HorizontalAlignment="Right"/>
+        <TextBlock Grid.Column="3" Grid.Row="1" DataContext="{Binding CurrentTask}" Text="{Binding ID}"/>
+        <TextBlock Grid.Column="1" Grid.Row="3" Text="Name:" HorizontalAlignment="Right"/>
+        <TextBox Grid.Column="3" Grid.Row="3" DataContext="{Binding CurrentTask}" Text="{Binding Name, Mode=TwoWay}" PreviewKeyDown="TextBox_PreviewKeyDown"/>
+        <Button Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="5" Width="100" Content="OK" Click="Button_Click"/>
+    </Grid>
+</Window>

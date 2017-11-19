@@ -1,0 +1,16 @@
+﻿<Window x:Class="TimeLogger.DayInfoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TimeLogger"
+        mc:Ignorable="d"
+        Title="DayInfoWindow" Height="300" Width="300" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+    <Grid>
+        <DockPanel Margin="10">
+            <TextBlock x:Name="dayText" DockPanel.Dock="Top" HorizontalAlignment="Center" Text="fdfsfsdfs"/>
+            <Separator DockPanel.Dock="Top"/>
+            <DataGrid x:Name="grid" DockPanel.Dock="Top" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserResizeRows="False"/>
+        </DockPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,75 @@
+﻿<Window x:Class="TimeLogger.PeriodsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TimeLogger"
+        mc:Ignorable="d"
+        Title="PeriodsWindow" Height="300" Width="300" Closing="Window_Closing" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+    <Window.Resources>
+        <local:DateTimeToDateConverter x:Key="dt2d"/>
+        <local:DateTimeToTimeConverter x:Key="dt2t"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="50
+                           "/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+        <ListView x:Name="list" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1" ItemsSource="{Binding Periods, Mode=OneWay}" SelectedItem="{Binding Selected, Mode=TwoWay}" SelectionMode="Single" MouseDoubleClick="listBox_MouseDoubleClick"  PreviewMouseRightButtonDown="ListBox_PreviewRightMouseButtonDown">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Date" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <TextBlock Text="{Binding Start,Converter={StaticResource dt2d}}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Start" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <TextBlock Text="{Binding Start,Converter={StaticResource dt2t}}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="End" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <TextBlock Text="{Binding End,Converter={StaticResource dt2t}}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Length" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <TextBlock Text="{Binding DurationString}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <local:DateTimePicker Grid.Column="1" Grid.Row="3" DataContext="{Binding Selected}" SelectedDate="{Binding Start, Mode=TwoWay}"/>
+        <local:DateTimePicker Grid.Column="3" Grid.Row="3" DataContext="{Binding Selected}" SelectedDate="{Binding End, Mode=TwoWay}"/>
+    </Grid>
+</Window>

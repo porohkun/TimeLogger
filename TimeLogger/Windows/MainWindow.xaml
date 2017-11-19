@@ -1,0 +1,88 @@
+﻿<Window x:Class="TimeLogger.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TimeLogger"
+        mc:Ignorable="d"
+        ShowInTaskbar="False" ResizeMode="CanResize" WindowStyle="ToolWindow"
+        MinWidth="220" MaxWidth="350" MinHeight="130" MaxHeight="130"
+        Title="{Binding Source={x:Static local:Settings.Title}}" Height="130" Width="220" Closing="Window_Closing"
+        Loaded="MainWindow_OnLoaded"
+        Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+    <Window.Resources>
+        <Style x:Key="ImageEnabled" TargetType="Image">
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.25"></Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="84"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="54"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+            <TextBlock Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1" VerticalAlignment="Top" x:Name="taskBlock"/>
+        <Grid Grid.Column="1" Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Rectangle Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="3" Stroke="#FF707070"/>
+            <TextBlock Grid.Column="0" Grid.Row="0" Text="Day:" Margin="4,0,0,0" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="0" Grid.Row="1" Text="Task:" Margin="4,0,0,0" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="0" Grid.Row="2" Text="Stage:" Margin="4,0,0,0" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="1" Grid.Row="0" Text="00:00:00" x:Name="dayTimeBlock" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="1" Grid.Row="1" Text="00:00:00" x:Name="taskTimeBlock" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="1" Grid.Row="2" Text="00:00:00" x:Name="stageTimeBlock" VerticalAlignment="Center"/>
+        </Grid>
+        <Grid Grid.Column="3" Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="24"/>
+                <ColumnDefinition Width="6"/>
+                <ColumnDefinition Width="24"/>
+                <ColumnDefinition Width="6"/>
+                <ColumnDefinition Width="24"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="24"/>
+                <RowDefinition Height="6"/>
+                <RowDefinition Height="24"/>
+            </Grid.RowDefinitions>
+            <Button Grid.Column="0" Grid.Row="0" x:Name="selectButton" Click="selectButton_Click">
+                <Image Source="/Resources/import.png" Width="16" Height="16" RenderOptions.BitmapScalingMode="NearestNeighbor" Style="{StaticResource ImageEnabled}"/>
+            </Button>
+            <Button Grid.Column="2" Grid.Row="0" x:Name="pauseButton" Click="pauseButton_Click" IsEnabled="False">
+                <Image Source="/Resources/pause.png" Width="16" Height="16" RenderOptions.BitmapScalingMode="NearestNeighbor" Style="{StaticResource ImageEnabled}"/>
+            </Button>
+            <Button Grid.Column="4" Grid.Row="0" x:Name="startButton" Click="startButton_Click" IsEnabled="False">
+                <Image Source="/Resources/play.png" Width="16" Height="16" RenderOptions.BitmapScalingMode="NearestNeighbor" Style="{StaticResource ImageEnabled}"/>
+            </Button>
+            <ToggleButton Grid.Column="0" Grid.Row="2" x:Name="ontopButton" Click="ontopButton_Click">
+                <Image Source="/Resources/ontop.png" Width="16" Height="16" RenderOptions.BitmapScalingMode="NearestNeighbor" Style="{StaticResource ImageEnabled}"/>
+            </ToggleButton>
+            <Button Grid.Column="2" Grid.Row="2" x:Name="infoButton" Click="infoButton_Click">
+                <Image Source="/Resources/info.png" Width="16" Height="16" RenderOptions.BitmapScalingMode="NearestNeighbor" Style="{StaticResource ImageEnabled}"/>
+            </Button>
+            <Button Grid.Column="4" Grid.Row="2" x:Name="settingsButton" Click="settingsButton_Click">
+                <Image Source="/Resources/gear.png" Width="16" Height="16" RenderOptions.BitmapScalingMode="NearestNeighbor" Style="{StaticResource ImageEnabled}"/>
+            </Button>
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,64 @@
+﻿<Window x:Class="TimeLogger.InfoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TimeLogger"
+        mc:Ignorable="d"
+        Title="Week grid" Height="348.297" Width="717.956" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="24"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="140"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="24"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+        <Button Grid.Column="2" Grid.Row="1" Click="PrewWeek_Click">
+            <Image Source="/Resources/left-icon.png" Width="16" Height="16" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+        </Button>
+        <TextBlock x:Name="weekText" Grid.Column="4" Grid.Row="1" Text="26.06 - 02.07 2017" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Button Grid.Column="6" Grid.Row="1" Click="NextWeek_Click">
+            <Image Source="/Resources/right-icon.png" Width="16" Height="16" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+        </Button>
+        <Grid Grid.Column="1" Grid.ColumnSpan="7" Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="40"/>
+            </Grid.ColumnDefinitions>
+            <local:DayControl x:Name="day1" Grid.Column="02" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}"/>
+            <local:DayControl x:Name="day2" Grid.Column="04" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}"/>
+            <local:DayControl x:Name="day3" Grid.Column="06" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}"/>
+            <local:DayControl x:Name="day4" Grid.Column="08" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}"/>
+            <local:DayControl x:Name="day5" Grid.Column="10" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}"/>
+            <local:DayControl x:Name="day6" Grid.Column="12" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}"/>
+            <local:DayControl x:Name="day7" Grid.Column="14" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}"/>
+        </Grid>
+    </Grid>
+</Window>
