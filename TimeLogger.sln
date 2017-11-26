@@ -7,11 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeLogger", "TimeLogger\Ti
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeLoggerApp", "TimeLoggerApp\TimeLoggerApp.csproj", "{215796CF-2E22-4C3B-9C0A-1645C544F05A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MimiJson", "..\..\Packages\mimi-json\MimiJson\MimiJson.csproj", "{215C049E-EA04-46F8-91FD-7D9242619E2B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Installer", "Installer\Installer.csproj", "{294E6338-7741-4869-B732-8C10F8EFA672}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WixSharpSetup", "WixSharpSetup\WixSharpSetup.csproj", "{C9A243E5-6443-4A00-ACAC-C20A61286264}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MimiJson.Net45", "..\..\Packages\mimi-json\MimiJson\MimiJson.Net45.csproj", "{9E323F98-86B0-490C-9F6A-5DE574D8DBFB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,6 @@ Global
 		{215796CF-2E22-4C3B-9C0A-1645C544F05A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{215796CF-2E22-4C3B-9C0A-1645C544F05A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{215796CF-2E22-4C3B-9C0A-1645C544F05A}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{215C049E-EA04-46F8-91FD-7D9242619E2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{215C049E-EA04-46F8-91FD-7D9242619E2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{215C049E-EA04-46F8-91FD-7D9242619E2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{215C049E-EA04-46F8-91FD-7D9242619E2B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{294E6338-7741-4869-B732-8C10F8EFA672}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{294E6338-7741-4869-B732-8C10F8EFA672}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{294E6338-7741-4869-B732-8C10F8EFA672}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -41,6 +37,10 @@ Global
 		{C9A243E5-6443-4A00-ACAC-C20A61286264}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9A243E5-6443-4A00-ACAC-C20A61286264}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9A243E5-6443-4A00-ACAC-C20A61286264}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E323F98-86B0-490C-9F6A-5DE574D8DBFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E323F98-86B0-490C-9F6A-5DE574D8DBFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E323F98-86B0-490C-9F6A-5DE574D8DBFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E323F98-86B0-490C-9F6A-5DE574D8DBFB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
