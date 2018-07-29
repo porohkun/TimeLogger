@@ -3,43 +3,43 @@
   "files": [
     {
       "name": "TimeLogger.exe",
-      "url": "https://github.com/porohkun/TimeLogger/raw/gh-pages/TimeLogger.exe",
+      "url": "https://raw.githubusercontent.com/porohkun/TimeLogger/gh-pages/TimeLogger.exe",
       "path": "",
       "action": "replace"
     },
     {
       "name": "MimiJson.dll",
-      "url": "https://github.com/porohkun/TimeLogger/raw/gh-pages/MimiJson.dll",
+      "url": "https://raw.githubusercontent.com/porohkun/TimeLogger/gh-pages/MimiJson.dll",
       "path": "",
       "action": "replace"
     },
     {
       "name": "System.Windows.Controls.Input.Toolkit.dll",
-      "url": "https://github.com/porohkun/TimeLogger/raw/gh-pages/System.Windows.Controls.Input.Toolkit.dll",
+      "url": "https://raw.githubusercontent.com/porohkun/TimeLogger/gh-pages/System.Windows.Controls.Input.Toolkit.dll",
       "path": "",
       "action": "replace"
     },
     {
       "name": "System.Windows.Controls.Layout.Toolkit.dll",
-      "url": "https://github.com/porohkun/TimeLogger/raw/gh-pages/System.Windows.Controls.Layout.Toolkit.dll",
+      "url": "https://raw.githubusercontent.com/porohkun/TimeLogger/gh-pages/System.Windows.Controls.Layout.Toolkit.dll",
       "path": "",
       "action": "replace"
     },
     {
       "name": "WpfControls.dll",
-      "url": "https://github.com/porohkun/TimeLogger/raw/gh-pages/WpfControls.dll",
+      "url": "https://raw.githubusercontent.com/porohkun/TimeLogger/gh-pages/WpfControls.dll",
       "path": "",
       "action": "replace"
     },
     {
       "name": "WPFToolkit.dll",
-      "url": "https://github.com/porohkun/TimeLogger/raw/gh-pages/WPFToolkit.dll",
+      "url": "https://raw.githubusercontent.com/porohkun/TimeLogger/gh-pages/WPFToolkit.dll",
       "path": "",
       "action": "replace"
     },
     {
       "name": "Installer.exe",
-      "url": "https://github.com/porohkun/TimeLogger/raw/gh-pages/Installer.exe",
+      "url": "https://raw.githubusercontent.com/porohkun/TimeLogger/gh-pages/Installer.exe",
       "path": "",
       "action": "misc"
     }
