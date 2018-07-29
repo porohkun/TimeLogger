@@ -138,6 +138,7 @@ namespace TimeLogger
             dayTimeBlock.Text = new TimeSpan(TaskPeriod.GetToday().Sum(p => Math.Min((p.End - p.Start).Ticks, (p.End - DateTime.Now.Date).Ticks))).ToJira();
             _notifyIcon.Text = "Day total: " + dayTimeBlock.Text;
             taskTimeBlock.Text = TaskPeriod.TaskDuration(_currentTask).ToJira();
+            taskDayTimeBlock.Text = new TimeSpan(TaskPeriod.GetToday().Where(t=>t.Task==_currentTask).Sum(p => Math.Min((p.End - p.Start).Ticks, (p.End - DateTime.Now.Date).Ticks))).ToJira();
             if (_currentPeriod != null)
                 stageTimeBlock.Text = _currentPeriod.DurationString;
             if (DateTime.Now - _lastSave > new TimeSpan(0, 10, 0))

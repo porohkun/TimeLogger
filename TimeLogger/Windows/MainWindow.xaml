@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Style="{StaticResource BaseWindowStyle}"
         ResizeMode="CanResize"
-        MinWidth="220" MaxWidth="350" MinHeight="130" MaxHeight="130"
+        MinWidth="250" MaxWidth="350" MinHeight="140" MaxHeight="130"
         Title="{Binding Source={x:Static local:Settings.Title}}" Height="130" Width="220" Closing="Window_Closing"
         Loaded="MainWindow_OnLoaded">
     <Window.Resources>
@@ -23,29 +23,32 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="10"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="54"/>
+            <RowDefinition Height="64"/>
             <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1" VerticalAlignment="Top" x:Name="taskBlock"/>
         <Grid Grid.Column="1" Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="70"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Rectangle Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="3" Stroke="{StaticResource BorderMainBrush}"/>
-            <TextBlock Grid.Column="0" Grid.Row="0" Text="Day:" Margin="4,0,0,0" VerticalAlignment="Center"/>
+            <Rectangle Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="4" Stroke="{StaticResource BorderMainBrush}"/>
+            <TextBlock Grid.Column="0" Grid.Row="0" Text="Today:" Margin="4,0,0,0" VerticalAlignment="Center"/>
             <TextBlock Grid.Column="0" Grid.Row="1" Text="Task:" Margin="4,0,0,0" VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="0" Grid.Row="2" Text="Stage:" Margin="4,0,0,0" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="0" Grid.Row="2" Text="Task today:" Margin="4,0,0,0" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="0" Grid.Row="3" Text="Stage:" Margin="4,0,0,0" VerticalAlignment="Center"/>
             <TextBlock Grid.Column="1" Grid.Row="0" Text="00:00:00" x:Name="dayTimeBlock" VerticalAlignment="Center"/>
             <TextBlock Grid.Column="1" Grid.Row="1" Text="00:00:00" x:Name="taskTimeBlock" VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="1" Grid.Row="2" Text="00:00:00" x:Name="stageTimeBlock" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="1" Grid.Row="2" Text="00:00:00" x:Name="taskDayTimeBlock" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="1" Grid.Row="3" Text="00:00:00" x:Name="stageTimeBlock" VerticalAlignment="Center"/>
         </Grid>
-        <Grid Grid.Column="3" Grid.Row="2">
+        <Grid Grid.Column="3" Grid.Row="2" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="24"/>
                 <ColumnDefinition Width="6"/>
