@@ -54,15 +54,15 @@ namespace TimeLogger
                     grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(periodLength.TotalMinutes, GridUnitType.Star) });
                     var tb = new TextBlock
                     {
-                        Text = period.Task.ID,
-                        HorizontalAlignment = HorizontalAlignment.Stretch,
-                        Background = Brushes.Lavender
+                        Text = period.Task.Name,
+                        TextWrapping = TextWrapping.Wrap,
+                        HorizontalAlignment = HorizontalAlignment.Stretch
                     };
-                    var rect = new Rectangle { Stroke = new SolidColorBrush(Color.FromRgb(112, 112, 112)) };
-                    grid.Children.Add(tb);
+                    var rect = new Rectangle();// { Stroke = new SolidColorBrush(Color.FromRgb(112, 112, 112)) };
                     grid.Children.Add(rect);
-                    Grid.SetRow(tb, row);
+                    grid.Children.Add(tb);
                     Grid.SetRow(rect, row);
+                    Grid.SetRow(tb, row);
 
                     last = end;
                     row++;
@@ -83,6 +83,7 @@ namespace TimeLogger
         private void InfoButton_Click(object sender, RoutedEventArgs e)
         {
             var win = new DayInfoWindow();
+            win.Owner = Application.Current.MainWindow;
             win.ShowDay(_day);
             win.ShowDialog();
         }
@@ -90,6 +91,7 @@ namespace TimeLogger
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
             var win = new DayEditWindow();
+            win.Owner = Application.Current.MainWindow;
             win.ShowDay(_day);
             win.ShowDialog();
         }

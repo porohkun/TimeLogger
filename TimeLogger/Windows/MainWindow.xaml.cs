@@ -12,271 +12,284 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfControls.Editors;
+using System.ComponentModel;
 
 namespace TimeLogger
 {
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
-	public partial class MainWindow : Window
-	{
-		private static MainWindow _instance;
-		public static MainWindow Instance => _instance;
-		private DispatcherTimer _timer;
-		private DispatcherTimer _updateTimer;
-		private Task _currentTask;
-		private TaskPeriod _currentPeriod;
-		private DateTime _lastSave = DateTime.Now;
-		private bool _trueClosing = false;
-		private bool _ticking = false;
-		private readonly bool _hiddenStart = false;
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window, INotifyPropertyChanged
+    {
+        #region INotifyPropertyChanged Members
 
-		#region Actions
+        public event PropertyChangedEventHandler PropertyChanged;
 
-		void SelectTask()
-		{
-			var win = new SelectTaskWindow();
-			var dialogResult = win.ShowDialog();
-			if (dialogResult.HasValue && dialogResult.Value && !string.IsNullOrWhiteSpace(win.TaskId))
-			{
-				_currentTask = Task.GetById(win.TaskId);
-				if (string.IsNullOrWhiteSpace(_currentTask.Name))
-				{
-					var win2 = new SetNameWindow();
-					win2.CurrentTask = _currentTask;
-					win2.ShowDialog();
-				}
-				startButton.IsEnabled = true;
-				taskBlock.Text = string.Format("({0}) {1}", _currentTask.ID, _currentTask.Name);
-				_timer_Tick(null, null);
-			}
-		}
+        public void NotifyPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
-		void StartCurrentTask()
-		{
-			if (!_ticking)
-			{
-				_currentPeriod = TaskPeriod.GetNew(_currentTask);
-				_currentPeriod.Begin();
-				selectButton.IsEnabled = false;
-				startButton.IsEnabled = false;
-				pauseButton.IsEnabled = true;
-				SaveAll();
-				_ticking = true;
-			}
-		}
+        #endregion
 
-		void PauseCurrentTask()
-		{
-			if (_ticking)
-			{
-				_currentPeriod.Stop();
-				_currentPeriod = null;
-				selectButton.IsEnabled = true;
-				startButton.IsEnabled = true;
-				pauseButton.IsEnabled = false;
-				SaveAll();
-				_ticking = false;
-			}
-		}
+        private DispatcherTimer _timer;
+        private DispatcherTimer _updateTimer;
+        private Task _currentTask;
+        private TaskPeriod _currentPeriod;
+        private DateTime _lastSave = DateTime.Now;
+        private bool _trueClosing = false;
+        private readonly bool _hiddenStart = false;
+        private bool _ticking = false;
 
-		private void BeforeExit()
-		{
-			PauseCurrentTask();
-			SaveAll();
-		}
+        public bool Ticking
+        {
+            get => _ticking;
+            set
+            {
+                if (_ticking != value)
+                {
+                    _ticking = value;
+                    NotifyPropertyChanged(nameof(Ticking));
+                }
+            }
+        }
+        public bool HaveTask => _currentTask != null;
 
-		public static void SaveAll()
-		{
-			Task.SaveAll();
-			Instance._lastSave = DateTime.Now;
-		}
+        public MainWindow(bool hidden = false)
+        {
+            InitializeComponent();
+            DataContext = this;
 
-		#endregion
+            MakeIcon();
+            Task.LoadAll();
+            _timer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 2) };
+            _timer.Tick += _timer_Tick;
+            _timer.Start();
 
-		public MainWindow(bool hidden = false)
-		{
-			_instance = this;
-			InitializeComponent();
+            _updateTimer = new DispatcherTimer { Interval = new TimeSpan(2, 0, 0) };
+            _updateTimer.Tick += _updateTimer_Tick;
+            _updateTimer.Start();
 
-			MakeIcon();
-			Task.LoadAll();
-			_timer = new DispatcherTimer {Interval = new TimeSpan(0, 0, 2)};
-			_timer.Tick += _timer_Tick;
-			_timer.Start();
+            _hiddenStart = hidden;
 
-			_updateTimer = new DispatcherTimer {Interval = new TimeSpan(2, 0, 0)};
-			_updateTimer.Tick += _updateTimer_Tick;
-			_updateTimer.Start();
+            AsyncManager.Push(new AppUpdateTask());
+        }
 
-			_hiddenStart = hidden;
+        #region Actions
 
-			AsyncManager.Push(new AppUpdateTask());
-		}
+        void SelectTask()
+        {
+            var win = new SelectTaskWindow();
+            win.Owner = this;
+            var dialogResult = win.ShowDialog();
+            if (dialogResult.HasValue && dialogResult.Value && win.SelectedTask != null)
+            {
+                _currentTask = win.SelectedTask;
+                taskBlock.Text = string.Format("({0}) {1}", _currentTask.ID, _currentTask.Name);
+                _timer_Tick(null, null);
+                NotifyPropertyChanged(nameof(HaveTask));
+            }
+        }
 
-		private void _updateTimer_Tick(object sender, EventArgs e)
-		{
-			AsyncManager.Push(new AppUpdateTask());
-		}
+        void StartCurrentTask()
+        {
+            if (!Ticking)
+            {
+                _currentPeriod = TaskPeriod.GetNew(_currentTask);
+                _currentPeriod.Begin();
+                SaveAll();
+                Ticking = true;
+            }
+        }
 
-		private void _timer_Tick(object sender, EventArgs e)
-		{
-			dayTimeBlock.Text = new TimeSpan(TaskPeriod.GetToday().Sum(p => Math.Min((p.End - p.Start).Ticks, (p.End - DateTime.Now.Date).Ticks))).ToJira();
-			_notifyIcon.Text = "Day total: " + dayTimeBlock.Text;
-			taskTimeBlock.Text = TaskPeriod.TaskDuration(_currentTask).ToJira();
-			if (_currentPeriod != null)
-				stageTimeBlock.Text = _currentPeriod.DurationString;
-			if (DateTime.Now - _lastSave > new TimeSpan(0, 10, 0))
-				SaveAll();
-		}
+        void PauseCurrentTask()
+        {
+            if (Ticking)
+            {
+                _currentPeriod.Stop();
+                _currentPeriod = null;
+                SaveAll();
+                Ticking = false;
+            }
+        }
 
-		void HideWindow()
-		{
-			Hide();
-			_showHideMenuItem.Text = "Show";
-		}
+        private void BeforeExit()
+        {
+            PauseCurrentTask();
+            SaveAll();
+        }
 
-		void ShowWindow()
-		{
-			Show();
-			bool tm = Topmost;
-			Topmost = true;
-			Topmost = tm;
-			_showHideMenuItem.Text = "Hide";
-		}
+        public static void SaveAll()
+        {
+            Task.SaveAll();
+            Application.Current.MainWindow()._lastSave = DateTime.Now;
+        }
 
-		#region notify icon
+        #endregion
 
-		System.Windows.Forms.NotifyIcon _notifyIcon;
-		System.Windows.Forms.ToolStripMenuItem _showHideMenuItem;
-		void MakeIcon()
-		{
+        private void _updateTimer_Tick(object sender, EventArgs e)
+        {
+            AsyncManager.Push(new AppUpdateTask());
+        }
 
-			_notifyIcon = new System.Windows.Forms.NotifyIcon();
-			_notifyIcon.Icon = new System.Drawing.Icon(Application.GetResourceStream(new Uri("pack://application:,,,/TimeLogger;component/clock.ico")).Stream);
-			_notifyIcon.Visible = true;
-			//notifyIcon.DoubleClick += showHideMenu_Click;
-			_notifyIcon.MouseClick += notifyIcon_MouseClick;
-			_notifyIcon.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip() {
-				Size = new System.Drawing.Size(120, 126)
-			};
-			_notifyIcon.ContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
-			{
-				new System.Windows.Forms.ToolStripMenuItem() { Size = new System.Drawing.Size(119, 22), Text = "Hide" },
-				new System.Windows.Forms.ToolStripSeparator() { Size = new System.Drawing.Size(116, 6) },
-				new System.Windows.Forms.ToolStripMenuItem() { Size = new System.Drawing.Size(119, 22), Text = "Select Task" },
-				new System.Windows.Forms.ToolStripMenuItem() { Size = new System.Drawing.Size(119, 22), Text = "Start" },
-				new System.Windows.Forms.ToolStripMenuItem() { Size = new System.Drawing.Size(119, 22), Text = "Stop" },
-				new System.Windows.Forms.ToolStripSeparator() { Size = new System.Drawing.Size(116, 6) },
-				new System.Windows.Forms.ToolStripMenuItem() { Size = new System.Drawing.Size(119, 22), Text = "Exit" }
-			});
-			_notifyIcon.ContextMenuStrip.Items[0].Click += showHideMenu_Click;
-			_notifyIcon.ContextMenuStrip.Items[2].Click += selectMenu_Click;
-			_notifyIcon.ContextMenuStrip.Items[3].Click += startMenu_Click;
-			_notifyIcon.ContextMenuStrip.Items[4].Click += stopMenu_Click;
-			_notifyIcon.ContextMenuStrip.Items[6].Click += exitMenu_Click;
-			_showHideMenuItem = _notifyIcon.ContextMenuStrip.Items[0] as System.Windows.Forms.ToolStripMenuItem;
-		}
+        private void _timer_Tick(object sender, EventArgs e)
+        {
+            dayTimeBlock.Text = new TimeSpan(TaskPeriod.GetToday().Sum(p => Math.Min((p.End - p.Start).Ticks, (p.End - DateTime.Now.Date).Ticks))).ToJira();
+            _notifyIcon.Text = "Day total: " + dayTimeBlock.Text;
+            taskTimeBlock.Text = TaskPeriod.TaskDuration(_currentTask).ToJira();
+            if (_currentPeriod != null)
+                stageTimeBlock.Text = _currentPeriod.DurationString;
+            if (DateTime.Now - _lastSave > new TimeSpan(0, 10, 0))
+                SaveAll();
+        }
 
-		#endregion
+        void HideWindow()
+        {
+            Hide();
+            _showHideMenuItem.Text = "Show";
+        }
 
-		#region form buttons
+        void ShowWindow()
+        {
+            Show();
+            var tm = Topmost;
+            Topmost = true;
+            Topmost = tm;
+            _showHideMenuItem.Text = "Hide";
+        }
 
-		private void selectButton_Click(object sender, RoutedEventArgs e)
-		{
-			SelectTask();
-		}
+        #region notify icon
 
-		private void pauseButton_Click(object sender, RoutedEventArgs e)
-		{
-			PauseCurrentTask();
-		}
+        System.Windows.Forms.NotifyIcon _notifyIcon;
+        System.Windows.Forms.ToolStripMenuItem _showHideMenuItem;
+        void MakeIcon()
+        {
 
-		private void startButton_Click(object sender, RoutedEventArgs e)
-		{
-			StartCurrentTask();
-		}
+            _notifyIcon = new System.Windows.Forms.NotifyIcon();
+            _notifyIcon.Icon = new System.Drawing.Icon(Application.GetResourceStream(new Uri("pack://application:,,,/TimeLogger;component/clock.ico")).Stream);
+            _notifyIcon.Visible = true;
+            //notifyIcon.DoubleClick += showHideMenu_Click;
+            _notifyIcon.MouseClick += notifyIcon_MouseClick;
+            _notifyIcon.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip()
+            {
+                Size = new System.Drawing.Size(120, 126)
+            };
+            _notifyIcon.ContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
+            {
+                new System.Windows.Forms.ToolStripMenuItem() { Size = new System.Drawing.Size(119, 22), Text = "Hide" },
+                new System.Windows.Forms.ToolStripSeparator() { Size = new System.Drawing.Size(116, 6) },
+                new System.Windows.Forms.ToolStripMenuItem() { Size = new System.Drawing.Size(119, 22), Text = "Select Task" },
+                new System.Windows.Forms.ToolStripMenuItem() { Size = new System.Drawing.Size(119, 22), Text = "Start" },
+                new System.Windows.Forms.ToolStripMenuItem() { Size = new System.Drawing.Size(119, 22), Text = "Stop" },
+                new System.Windows.Forms.ToolStripSeparator() { Size = new System.Drawing.Size(116, 6) },
+                new System.Windows.Forms.ToolStripMenuItem() { Size = new System.Drawing.Size(119, 22), Text = "Exit" }
+            });
+            _notifyIcon.ContextMenuStrip.Items[0].Click += showHideMenu_Click;
+            _notifyIcon.ContextMenuStrip.Items[2].Click += selectMenu_Click;
+            _notifyIcon.ContextMenuStrip.Items[3].Click += startMenu_Click;
+            _notifyIcon.ContextMenuStrip.Items[4].Click += stopMenu_Click;
+            _notifyIcon.ContextMenuStrip.Items[6].Click += exitMenu_Click;
+            _showHideMenuItem = _notifyIcon.ContextMenuStrip.Items[0] as System.Windows.Forms.ToolStripMenuItem;
+        }
 
-		private void ontopButton_Click(object sender, RoutedEventArgs e)
-		{
-			Topmost = !Topmost;
-		}
+        #endregion
 
-		private void infoButton_Click(object sender, RoutedEventArgs e)
-		{
-			var win = new InfoWindow();
-			win.Show();
-		}
+        #region form buttons
 
-		private void settingsButton_Click(object sender, RoutedEventArgs e)
-		{
-			var win = new SettingsWindow();
-			win.ShowDialog();
-		}
+        private void selectButton_Click(object sender, RoutedEventArgs e)
+        {
+            SelectTask();
+        }
 
-		private void jiraButton_Click(object sender, RoutedEventArgs e)
-		{
-			var win = new JiraWindow();
-			win.Show();
-		}
+        private void pauseButton_Click(object sender, RoutedEventArgs e)
+        {
+            PauseCurrentTask();
+        }
 
-		#endregion
+        private void startButton_Click(object sender, RoutedEventArgs e)
+        {
+            StartCurrentTask();
+        }
 
-		#region notify icon menu buttons
+        private void infoButton_Click(object sender, RoutedEventArgs e)
+        {
+            var win = new InfoWindow();
+            win.Owner = this;
+            win.ShowDialog();
+        }
 
-		private void notifyIcon_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
-		{
-			if (e.Button == System.Windows.Forms.MouseButtons.Left)
-				ShowWindow();
-		}
+        private void settingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            var win = new SettingsWindow();
+            win.Owner = this;
+            win.ShowDialog();
+        }
 
-		private void showHideMenu_Click(object sender, EventArgs e)
-		{
-			if (IsVisible)
-				HideWindow();
-			else
-				ShowWindow();
-		}
+        private void jiraButton_Click(object sender, RoutedEventArgs e)
+        {
+            var win = new JiraWindow();
+            win.Owner = this;
+            win.Show();
+        }
 
-		private void selectMenu_Click(object sender, EventArgs e)
-		{
-			SelectTask();
-		}
+        #endregion
 
-		private void startMenu_Click(object sender, EventArgs e)
-		{
-			StartCurrentTask();
-		}
+        #region notify icon menu buttons
 
-		private void stopMenu_Click(object sender, EventArgs e)
-		{
-			PauseCurrentTask();
-		}
+        private void notifyIcon_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+                ShowWindow();
+        }
 
-		private void exitMenu_Click(object sender, EventArgs e)
-		{
-			BeforeExit();
-			_trueClosing = true;
-			Close();
-		}
+        private void showHideMenu_Click(object sender, EventArgs e)
+        {
+            if (IsVisible)
+                HideWindow();
+            else
+                ShowWindow();
+        }
 
-		#endregion
+        private void selectMenu_Click(object sender, EventArgs e)
+        {
+            SelectTask();
+        }
 
-		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-		{
-			if (!_trueClosing)
-			{
-				e.Cancel = true;
-				HideWindow();
-			}
-			else
-				BeforeExit();
-		}
+        private void startMenu_Click(object sender, EventArgs e)
+        {
+            StartCurrentTask();
+        }
 
-		private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
-		{
-			if(_hiddenStart)
-				Hide();
-		}
-	}
+        private void stopMenu_Click(object sender, EventArgs e)
+        {
+            PauseCurrentTask();
+        }
+
+        private void exitMenu_Click(object sender, EventArgs e)
+        {
+            BeforeExit();
+            _trueClosing = true;
+            Close();
+        }
+
+        #endregion
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (!_trueClosing)
+            {
+                e.Cancel = true;
+                HideWindow();
+            }
+            else
+                BeforeExit();
+        }
+
+        private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (_hiddenStart)
+                Hide();
+        }
+    }
 }

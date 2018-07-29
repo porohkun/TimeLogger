@@ -61,7 +61,7 @@ namespace TimeLogger
         public PeriodsWindow(Task task) : this()
         {
             _task = task;
-            Title = _task.IDName;
+            Title = _task.Name;
         }
 
         void ListBox_PreviewRightMouseButtonDown(object sender, MouseButtonEventArgs e)

@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TimeLogger"
         mc:Ignorable="d"
-        Title="PeriodsWindow" Height="300" Width="300" Closing="Window_Closing" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+        Style="{StaticResource BaseWindowStyle}"
+        Title="PeriodsWindow" Height="300" Width="300" Closing="Window_Closing">
     <Window.Resources>
         <local:DateTimeToDateConverter x:Key="dt2d"/>
         <local:DateTimeToTimeConverter x:Key="dt2t"/>
@@ -22,13 +23,99 @@
             <RowDefinition Height="10"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="10"/>
-            <RowDefinition Height="50
-                           "/>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
-        <ListView x:Name="list" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1" ItemsSource="{Binding Periods, Mode=OneWay}" SelectedItem="{Binding Selected, Mode=TwoWay}" SelectionMode="Single" MouseDoubleClick="listBox_MouseDoubleClick"  PreviewMouseRightButtonDown="ListBox_PreviewRightMouseButtonDown">
+        <ListView x:Name="list" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1"
+                  Background="{StaticResource BgrLightBrush}"
+                  ItemsSource="{Binding Periods, Mode=OneWay}"
+                  SelectedItem="{Binding Selected, Mode=TwoWay}"
+                  SelectionMode="Single"
+                  MouseDoubleClick="listBox_MouseDoubleClick"
+                  PreviewMouseRightButtonDown="ListBox_PreviewRightMouseButtonDown">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListViewItem">
+                                <Border Name="Bd"
+                                        CornerRadius="0"
+                                        BorderThickness="1"
+                                        SnapsToDevicePixels="True"
+                                        Padding="{TemplateBinding Control.Padding}"
+                                        BorderBrush="{TemplateBinding Border.BorderBrush}"
+                                        Background="{TemplateBinding Panel.Background}">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition MaxHeight="11" />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Rectangle Name="UpperHighlight" Visibility="Collapsed" Fill="#75FFFFFF" />
+                                        <GridViewRowPresenter Grid.RowSpan="2"
+                                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                    </Grid>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="UIElement.IsMouseOver" Value="True"/>
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="Panel.Background" TargetName="Bd" Value="#1F26A0DA"/>
+                                        <Setter Property="Border.BorderBrush" TargetName="Bd" Value="#A826A0DA"/>
+                                    </MultiTrigger>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="Selector.IsSelectionActive" Value="False"/>
+                                            <Condition Property="Selector.IsSelected" Value="True"/>
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="Panel.Background" TargetName="Bd" Value="#3DDADADA"/>
+                                        <Setter Property="Border.BorderBrush" TargetName="Bd" Value="#FFDADADA"/>
+                                    </MultiTrigger>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="Selector.IsSelectionActive" Value="True"/>
+                                            <Condition Property="Selector.IsSelected" Value="True"/>
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="Panel.Background" TargetName="Bd" Value="#3D26A0DA"/>
+                                        <Setter Property="Border.BorderBrush" TargetName="Bd" Value="#FF26A0DA"/>
+                                    </MultiTrigger>
+                                    <Trigger Property="UIElement.IsEnabled" Value="False">
+                                        <Setter Property="TextElement.Foreground" TargetName="Bd" Value="#FF6D6D6D"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
             <ListView.View>
                 <GridView>
+                    <GridView.ColumnHeaderContainerStyle>
+                        <Style TargetType="GridViewColumnHeader">
+                            <Setter Property="Background" Value="{StaticResource BgrLightBrush}"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="GridViewColumnHeader">
+                                        <Grid>
+                                            <Border  BorderBrush="{StaticResource BorderMainBrush}" BorderThickness="1,0,0,0" Name="HeaderBorder" Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter Name="HeaderContent" Content="{TemplateBinding Content}" Margin="0,0,0,1" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                            </Border>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsPressed" Value="true">
+                                                <Setter TargetName="HeaderContent" Property="Margin" Value="1,1,0,0"/>
+                                            </Trigger>
+                                            <Trigger Property="IsEnabled" Value="false">
+                                                <Setter Property="Opacity" Value=".5" TargetName="HeaderBorder"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GridView.ColumnHeaderContainerStyle>
                     <GridViewColumn Header="Date" >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>

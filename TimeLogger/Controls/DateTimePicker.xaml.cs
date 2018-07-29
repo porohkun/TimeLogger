@@ -28,7 +28,7 @@ namespace TimeLogger
         public DateTimePicker()
         {
             InitializeComponent();
-            CalDisplay.SelectedDatesChanged += CalDisplay_SelectedDatesChanged;
+            //CalDisplay.SelectedDatesChanged += CalDisplay_SelectedDatesChanged;
             DateDisplay.PreviewMouseUp += DateDisplay_PreviewMouseUp;
             DateDisplay.LostFocus += DateDisplay_LostFocus;
             DateDisplay.PreviewKeyDown += DateTimePicker_PreviewKeyDown;
@@ -70,11 +70,11 @@ namespace TimeLogger
             set { SetValue(DateFormatProperty, value); }
         }
 
-        public bool ShowCalendarButton
-        {
-            get { return PopUpCalendarButton.Visibility == Visibility.Visible; }
-            set { PopUpCalendarButton.Visibility = (value ? Visibility.Visible : Visibility.Collapsed); }
-        }
+        //public bool ShowCalendarButton
+        //{
+        //    get { return PopUpCalendarButton.Visibility == Visibility.Visible; }
+        //    set { PopUpCalendarButton.Visibility = (value ? Visibility.Visible : Visibility.Collapsed); }
+        //}
 
         public string _inputDateFormat;
         public string InputDateFormat()
@@ -158,10 +158,10 @@ namespace TimeLogger
 
         private void CalDisplay_SelectedDatesChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            PopUpCalendarButton.IsChecked = false;
+            //PopUpCalendarButton.IsChecked = false;
             TimeSpan timeOfDay = TimeSpan.Zero;
             timeOfDay = SelectedDate.TimeOfDay;
-            SelectedDate = CalDisplay.SelectedDate.Value.Date + timeOfDay;
+            //SelectedDate = CalDisplay.SelectedDate.Value.Date + timeOfDay;
         }
 
         private void DateDisplay_PreviewMouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -323,8 +323,8 @@ namespace TimeLogger
             var me = (DateTimePicker)obj;
 
             var date = (DateTime)args.NewValue;
-            me.CalDisplay.SelectedDate = date;
-            me.CalDisplay.DisplayDate = date;
+            //me.CalDisplay.SelectedDate = date;
+            //me.CalDisplay.DisplayDate = date;
             if (me.DateDisplay.IsFocused && !me._forceTextUpdateNow)
             {
                 DateTime? oldDate = me.ParseDateText(true);
@@ -466,7 +466,7 @@ namespace TimeLogger
         StreamGeometry _triangle = new StreamGeometry();
         bool _shown;
         double _x, _top, _bottom;
-        public Pen Outline = new Pen(new SolidColorBrush(Color.FromArgb(64, 255, 255, 255)), 5);
+        public Pen Outline = new Pen(new SolidColorBrush(Color.FromArgb(64, 255, 255, 255)), 2);
         public Brush Fill = Brushes.Black;
 
         public TextBoxUpDownAdorner(TextBox adornedBox) : base(adornedBox)

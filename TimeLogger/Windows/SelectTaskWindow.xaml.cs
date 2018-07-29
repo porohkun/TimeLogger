@@ -16,29 +16,78 @@ using System.Windows.Shapes;
 
 namespace TimeLogger
 {
+    public class SelectTaskWindowDummy
+    {
+        public bool ShowArchive { get; set; }
+        public ObservableCollection<Task> Tasks { get; set; } = new ObservableCollection<Task>();
+        public ObservableCollection<Label> Tags { get; set; } = new ObservableCollection<Label>();
+
+        public SelectTaskWindowDummy()
+        {
+            Tasks.Add(new Task("ttt1", "task_01", "aaa", "bbb"));
+            Tasks.Add(new Task("ttt2", "task_02", "aaa", "ccc"));
+            Tasks.Add(new Task("ttt3", "task_03", "aaa", "ddd"));
+            Tasks.Add(new Task("ttt4", "task_04", "bbb", "ccc"));
+            Tasks.Add(new Task("ttt5", "task_05", "bbb", "ddd"));
+
+            Tags.Add(new Label("aaa"));
+            Tags.Add(new Label("bbb"));
+            Tags.Add(new Label("ccc"));
+            Tags.Add(new Label("ddd"));
+        }
+    }
+
     /// <summary>
     /// Interaction logic for SelectTaskWindow.xaml
     /// </summary>
-    public partial class SelectTaskWindow : Window
+    public partial class SelectTaskWindow : Window, INotifyPropertyChanged
     {
+        #region INotifyPropertyChanged Members
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void NotifyPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
+
         private bool _showArchive;
+        private bool _editTask = true;
+        private ObservableCollection<Task> _tasks;
+        private CollectionView _tasksView;
+        private CollectionView _tagsView;
+        private Task _selectedTask;
+        private string _selectedTaskName;
+        private IEnumerable<Label> _selectedTaskTags;
+
         public bool ShowArchive
         {
-            get { return _showArchive; }
+            get => _showArchive;
             set
             {
-                _showArchive = value;
-                RefreshView();
+                if (_showArchive != value)
+                {
+                    _showArchive = value;
+                    EditTask = false;
+                    NotifyPropertyChanged(nameof(ShowArchive));
+                    RefreshView();
+                }
             }
         }
-
-        public string TaskId
+        public bool EditTask
         {
-            get { return taskName.Text; }
-            set { taskName.Text = value; }
+            get => _editTask;
+            set
+            {
+                if (_editTask != value)
+                {
+                    _editTask = value;
+                    NotifyPropertyChanged(nameof(EditTask));
+                }
+            }
         }
-
-        private ObservableCollection<Task> _tasks;
         public ObservableCollection<Task> Tasks
         {
             get
@@ -46,47 +95,86 @@ namespace TimeLogger
                 if (_tasks == null)
                 {
                     _tasks = new ObservableCollection<Task>(Task.GetAllTasks());
-                    _tasks.Sort((t1, t2) => { return t1.ID.CompareTo(t2.ID); });
+                    _tasks.Sort((Comparison<Task>)((t1, t2) => { return (int)t1.ID.CompareTo((string)t2.ID); }));
                 }
                 return _tasks;
             }
         }
+        public ObservableCollection<Label> Tags => Label.Labels;
+        public Task SelectedTask
+        {
+            get => _selectedTask;
+            set
+            {
+                if (_selectedTask != value)
+                {
+                    _selectedTask = value;
+                    EditTask = false;
+                    NotifyPropertyChanged(nameof(SelectedTask));
+                }
+            }
+        }
+        public string SelectedTaskName
+        {
+            get => _selectedTaskName;
+            set
+            {
+                if (_selectedTaskName != value)
+                {
+                    _selectedTaskName = value;
+                    NotifyPropertyChanged(nameof(SelectedTaskName));
+                }
+            }
+        }
+        public IEnumerable<Label> SelectedTaskTags
+        {
+            get => _selectedTaskTags;
+            set
+            {
+                if (_selectedTaskTags != value)
+                {
+                    _selectedTaskTags = value;
+                    NotifyPropertyChanged(nameof(SelectedTaskTags));
+                }
+            }
+        }
+
 
         public SelectTaskWindow()
         {
             InitializeComponent();
             DataContext = this;
 
-            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(Tasks);
-            view.Filter = TaskFilter;
+            _tasksView = (CollectionView)CollectionViewSource.GetDefaultView(Tasks);
+            _tasksView.Filter = TaskFilter;
+            _tagsView = (CollectionView)CollectionViewSource.GetDefaultView(Tags);
+            _tagsView.Filter = TagFilter;
         }
 
         private void RefreshView()
         {
-            CollectionViewSource.GetDefaultView(Tasks).Refresh();
+            _tasksView.Refresh();
+            _tagsView.Refresh();
         }
 
         private bool TaskFilter(object item)
         {
-            var task = item as Task;
-            return (!task.Archived || _showArchive) && (task.ID.ToLower().Contains(TaskId.ToLower()) || task.Name.ToLower().Contains(TaskId.ToLower()));
+            if (!(item is Task task)) return false;
+            if (ShowArchive != task.Archived)
+                return false;
+            foreach (var label in Label.Labels.Where(l => l.Selected))
+                if (!task.Tags.Contains(label))
+                    return false;
+            return true;
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private bool TagFilter(object item)
         {
-            RefreshView();
-        }
-
-        private void okButton_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = true;
-            Close();
-        }
-
-        private void cancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = false;
-            Close();
+            if (!(item is Label label)) return false;
+            if (ShowArchive)
+                return label.ArchivedCount > 0;
+            else
+                return label.Count > label.ArchivedCount;
         }
 
         private void taskName_KeyDown(object sender, KeyEventArgs e)
@@ -101,22 +189,7 @@ namespace TimeLogger
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-        }
-
-        private void listBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if (listBox.SelectedItem != null)
-            {
-                TaskId = (listBox.SelectedItem as Task).ID.ToString();
-                DialogResult = true;
-                Close();
-            }
-        }
-
-        private void listBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (listBox.SelectedItem != null)
-                taskName.Text = (listBox.SelectedItem as Task).ID;
+            EditTask = false;
         }
 
         void ListBox_PreviewRightMouseButtonDown(object sender, MouseButtonEventArgs e)
@@ -140,15 +213,17 @@ namespace TimeLogger
         {
             var task = e.Parameter as Task;
             var win = new PeriodsWindow(task);
+            win.Owner = this;
             win.Show();
         }
 
         private void CommandBinding_Edit(object sender, ExecutedRoutedEventArgs e)
         {
-            var task = e.Parameter as Task;
-            var win = new SetNameWindow();
-            win.CurrentTask = task;
-            win.Show();
+            EditTask = true;
+            SelectedTaskName = SelectedTask.Name;
+            SelectedTaskTags = SelectedTask.Tags.ToList();
+            TaskNameTextBox.Focus();
+            TaskNameTextBox.SelectAll();
         }
 
         private void CommonCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -159,6 +234,43 @@ namespace TimeLogger
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             MainWindow.SaveAll();
+        }
+
+        private void TagsView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            foreach (Label label in e.AddedItems)
+                label.Selected = true;
+            foreach (Label label in e.RemovedItems)
+                label.Selected = false;
+            RefreshView();
+        }
+
+        private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            SelectedTask = ((ListViewItem)sender).Content as Task;
+            DialogResult = true;
+            Close();
+        }
+
+        private void ApplyTaskEdit_Click(object sender, RoutedEventArgs e)
+        {
+            EditTask = false;
+            SelectedTask.Name = SelectedTaskName;
+            SelectedTask.SetTags(SelectedTaskTags);
+        }
+
+        private void CancelTaskEdit_Click(object sender, RoutedEventArgs e)
+        {
+            EditTask = false;
+        }
+
+        private void NewTask_Click(object sender, RoutedEventArgs e)
+        {
+            var task = Task.GetById(Guid.NewGuid().ToString());
+            Tasks.Add(task);
+            _tasksView.Refresh();
+            SelectedTask = task;
+            CommandBinding_Edit(null, null);
         }
     }
 }

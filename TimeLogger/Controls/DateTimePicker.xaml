@@ -29,6 +29,9 @@
                      MinHeight="{Binding ElementName=PopUpCalendarButton, Path=ActualHeight}" Text="yyyy-MM-dd HH:mm">
             <TextBox.Style>
                 <Style TargetType="TextBox">
+                    <Setter Property="Foreground" Value="{StaticResource TextMainBrush}"/>
+                    <Setter Property="Background" Value="{StaticResource BgrLightBrush}"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource BorderMainBrush}"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding DateTextIsWrong, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Value="True">
                             <Setter Property="Background" Value="LightGray" />
@@ -37,19 +40,19 @@
                 </Style>
             </TextBox.Style>
         </TextBox>
-        <ToggleButton Grid.Column="1" Template="{StaticResource IconButton}" 
+        <!--<ToggleButton Grid.Column="1" Template="{StaticResource IconButton}" 
                       MaxHeight="21" 
                       Margin="-1,0,0,0" 
                       Name="PopUpCalendarButton" 
                       IsChecked="False"
                       IsHitTestVisible="{Binding ElementName=CalendarPopup, Path=IsOpen, Mode=OneWay, Converter={local:BoolInverter}}" >
-            <!--<Image Source="/Resources/clock.png" Stretch="None" HorizontalAlignment="Left"  />-->
-        </ToggleButton>
-        <Popup IsOpen="{Binding Path=IsChecked, ElementName=PopUpCalendarButton}" 
+            --><!--<Image Source="/Resources/clock.png" Stretch="None" HorizontalAlignment="Left"  />--><!--
+        </ToggleButton>-->
+        <!--<Popup IsOpen="{Binding Path=IsChecked, ElementName=PopUpCalendarButton}" 
                x:Name="CalendarPopup" Margin="0,-7,0,0"
                PopupAnimation="Fade"
                StaysOpen="False">
             <wpftc:Calendar Margin="0,-1,0,0" x:Name="CalDisplay" ></wpftc:Calendar>
-        </Popup>
+        </Popup>-->
     </Grid>
 </UserControl>

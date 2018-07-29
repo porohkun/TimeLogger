@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TimeLogger"
         mc:Ignorable="d"
-        Title="Settings" Height="150" Width="300" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+        Style="{StaticResource BaseWindowStyle}"
+        Title="Settings" Height="150" Width="300">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="10"/>

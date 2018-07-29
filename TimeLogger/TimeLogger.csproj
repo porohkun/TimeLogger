@@ -65,6 +65,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Packages\WPF-AutoComplete-TextBox\WpfControls\WpfControls.CS\WpfControls.CS.csproj">
+      <Project>{bb2abb74-ba58-4812-83aa-ec8171f42df4}</Project>
+      <Name>WpfControls.CS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MimiJson\MimiJson\MimiJson.Net45.csproj">
+      <Project>{9e323f98-86b0-490c-9f6a-5de574d8dbfb}</Project>
+      <Name>MimiJson.Net45</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -73,25 +84,35 @@
     <Compile Include="AsyncManager\AsyncManager.cs" />
     <Compile Include="AsyncManager\IAsyncTask.cs" />
     <Compile Include="AsyncManager\TaskStatus.cs" />
+    <Compile Include="ColorCompareWindow.xaml.cs">
+      <DependentUpon>ColorCompareWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\DateTimePicker.xaml.cs">
       <DependentUpon>DateTimePicker.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TagsControl.xaml.cs">
+      <DependentUpon>TagsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Converters\BooleanAndConverter.cs" />
     <Compile Include="Converters\DateTimeToTimeConverter.cs" />
     <Compile Include="Converters\DateTimeToDateConverter.cs" />
     <Compile Include="Converters\BooleanToColorArchivedConverter.cs" />
+    <Compile Include="Converters\ReverseBooleanConverter.cs" />
+    <Compile Include="Converters\SelectValueByBoolConverter.cs" />
+    <Compile Include="Converters\ReverseBooleanToVisibilityConverter.cs" />
     <Compile Include="CustomCommands.cs" />
     <Compile Include="Controls\DayControl.xaml.cs">
       <DependentUpon>DayControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="LabelSuggestionProvider.cs" />
+    <Compile Include="Logic\Label.cs" />
+    <Compile Include="Misc\PathDecorator.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Windows\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\DayEditWindow.xaml.cs">
       <DependentUpon>DayEditWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\SetNameWindow.xaml.cs">
-      <DependentUpon>SetNameWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\DayInfoWindow.xaml.cs">
       <DependentUpon>DayInfoWindow.xaml</DependentUpon>
@@ -112,6 +133,10 @@
     <Compile Include="Logic\Task.cs" />
     <Compile Include="Logic\TaskPeriod.cs" />
     <Compile Include="TaskTimer.cs" />
+    <Page Include="ColorCompareWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\DateTimePicker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -120,15 +145,31 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\TagsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Converters.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Dark\AutoCompleteBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Icons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Dark\Colors.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\DayEditWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\SetNameWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -228,11 +269,4 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Packages\mimi-json\MimiJson\MimiJson.Net45.csproj">
-      <Project>{9e323f98-86b0-490c-9f6a-5de574d8dbfb}</Project>
-      <Name>MimiJson.Net45</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

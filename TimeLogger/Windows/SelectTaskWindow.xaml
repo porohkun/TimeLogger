@@ -5,12 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TimeLogger"
         mc:Ignorable="d"
-        ShowInTaskbar="False" ResizeMode="CanResize" WindowStyle="ToolWindow"
-        Title="Tasks" Height="300" Width="300" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Loaded="Window_Loaded" Closing="Window_Closing">
-    <Window.Resources>
-        <BooleanToVisibilityConverter x:Key="b2v" />
-        <local:BooleanToColorArchivedConverter  x:Key="b2c"/>
-    </Window.Resources>
+        Style="{StaticResource BaseWindowStyle}"
+        d:DataContext="{StaticResource SelectTaskWindowDummy}"
+        ResizeMode="CanResize"
+        Title="Tasks" Height="400" Width="600" Loaded="Window_Loaded" Closing="Window_Closing">
     <Window.CommandBindings>
         <CommandBinding Command="local:CustomCommands.Archive"     Executed="CommandBinding_Archive"     CanExecute="CommonCommandBinding_CanExecute" />
         <CommandBinding Command="local:CustomCommands.UnArchive"   Executed="CommandBinding_UnArchive"   CanExecute="CommonCommandBinding_CanExecute" />
@@ -19,68 +17,90 @@
     </Window.CommandBindings>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="180"/>
+            <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="80"/>
-            <ColumnDefinition Width="20"/>
-            <ColumnDefinition Width="80"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="10"/>
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="10"/>
-            <RowDefinition Height="18"/>
-            <RowDefinition Height="5"/>
-            <RowDefinition Height="18"/>
-            <RowDefinition Height="5"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="5"/>
-            <RowDefinition Height="20"/>
-            <RowDefinition Height="10"/>
-        </Grid.RowDefinitions>
-        <TextBlock Text="Task name:" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1"/>
-        <CheckBox Content="Show archive" Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="1" HorizontalAlignment="Right" IsChecked="{Binding ShowArchive}" />
-        <TextBox x:Name="taskName" Grid.Column="1" Grid.ColumnSpan="5" Grid.Row="3" TextChanged="TextBox_TextChanged" KeyDown="taskName_KeyDown"/>
-        <ListView x:Name="listBox" Grid.Column="1" Grid.ColumnSpan="5" Grid.Row="5" ItemsSource="{Binding Tasks, Mode=OneWay}" SelectionMode="Single" SelectionChanged="listBox_SelectionChanged" MouseDoubleClick="listBox_MouseDoubleClick"  PreviewMouseRightButtonDown="ListBox_PreviewRightMouseButtonDown">
-            <ListView.Resources>
-                <ContextMenu x:Key="ItemContextMenu">
-                    <MenuItem Header="{Binding IDName}" Focusable="False" IsHitTestVisible="False"/>
-                    <Separator/>
-                    <MenuItem Header="Archive" Command="local:CustomCommands.Archive" CommandParameter="{Binding}" Background="WhiteSmoke" Visibility="{Binding UnArchived,Converter={StaticResource b2v}}"/>
-                    <MenuItem Header="UnArchive" Command="local:CustomCommands.UnArchive" CommandParameter="{Binding}" Background="WhiteSmoke" Visibility="{Binding Archived,Converter={StaticResource b2v}}"/>
-                    <MenuItem Header="Periods" Command="local:CustomCommands.ShowPeriods" CommandParameter="{Binding}" Background="WhiteSmoke"/>
-                    <MenuItem Header="Edit" Command="local:CustomCommands.Edit" CommandParameter="{Binding}" Background="WhiteSmoke"/>
-                </ContextMenu>
-            </ListView.Resources>
-            <ListView.ItemContainerStyle>
-                <Style TargetType="{x:Type ListViewItem}" >
-                    <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
-                </Style>
-            </ListView.ItemContainerStyle>
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Id" >
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Grid Background="{Binding Archived,Converter={StaticResource b2c}}">
-                                    <TextBlock Text="{Binding ID}"/>
-                                </Grid>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Name" >
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Grid Background="{Binding Archived,Converter={StaticResource b2c}}">
-                                    <TextBlock Text="{Binding Name}"/>
-                                </Grid>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <Button Content="OK" Grid.Column="2" Grid.Row="7" Click="okButton_Click"/>
-        <Button Content="Cancel" Grid.Column="4" Grid.Row="7" Click="cancelButton_Click"/>
+        <DockPanel Grid.Column="0" Margin="5,5,0,5">
+            <Grid DockPanel.Dock="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <ToggleButton Grid.Column="0" Content="Active" IsChecked="{Binding ShowArchive, Converter={StaticResource ReverseBool}}"/>
+                <ToggleButton Grid.Column="1" Content="Archived" IsChecked="{Binding ShowArchive}"/>
+            </Grid>
+            <Button DockPanel.Dock="Top" Margin="5" Content="New task" Click="NewTask_Click" Visibility="{Binding ShowArchive, Converter={StaticResource ReverseBoolToVis}}"/>
+            <ListView ItemsSource="{Binding Tags, Mode=OneWay}" SelectionChanged="TagsView_SelectionChanged" Background="{DynamicResource BgrLightBrush}" HorizontalContentAlignment="Stretch">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <DockPanel Width="Auto" HorizontalAlignment="Stretch">
+                            <Path DockPanel.Dock="Left" Style="{StaticResource Tag}" Width="12" Height="12" Fill="{DynamicResource PathMainBrush}" />
+                            <TextBlock DockPanel.Dock="Left" Text="{Binding Name}" Margin="4,0"/>
+                            <TextBlock DockPanel.Dock="Right" HorizontalAlignment="Right">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource ValByBoolConverter}">
+                                        <Binding Path="ShowArchive" RelativeSource="{RelativeSource AncestorType={x:Type local:SelectTaskWindow}}"/>
+                                        <Binding Path="ArchivedCount"/>
+                                        <Binding Path="NotArchivedCount"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </DockPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </DockPanel>
+
+        <GridSplitter Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" Background="{DynamicResource BgrMainBrush}" Foreground="{DynamicResource BorderMainBrush}"/>
+
+        <DockPanel Grid.Column="2" Margin="0,5,5,5">
+            <Grid DockPanel.Dock="Top" Margin="0,0,0,5" Visibility="{Binding EditTask, Converter={StaticResource BoolToVisConverter}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="20"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="4"/>
+                    <RowDefinition Height="17"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Column="0" Grid.Row="0" Text="Task name" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0"/>
+                <TextBox x:Name="TaskNameTextBox" Grid.Column="1" Grid.Row="0" Text="{Binding SelectedTaskName, Mode=TwoWay}"/>
+                <local:TagsControl Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="2" Tags="{Binding SelectedTaskTags}"/>
+                <Button Grid.Column="3" Grid.Row="0" Click="ApplyTaskEdit_Click" Style="{StaticResource PathButton}" local:PathDecorator.PathStyle="{StaticResource Check}" Foreground="{StaticResource PlayBrush}"/>
+                <Button Grid.Column="5" Grid.Row="0" Click="CancelTaskEdit_Click" Style="{StaticResource PathButton}" local:PathDecorator.PathStyle="{StaticResource Cross}" Foreground="{StaticResource PlayBrush}"/>
+            </Grid>
+            <ListView Grid.Column="2" ItemsSource="{Binding Tasks}" SelectionMode="Single" SelectedItem="{Binding SelectedTask, Mode=TwoWay}" Background="{DynamicResource BgrLightBrush}" HorizontalContentAlignment="Stretch">
+                <ListView.Resources>
+                    <ContextMenu x:Key="ItemContextMenu">
+                        <MenuItem Header="{Binding Name}" Focusable="False" IsHitTestVisible="False"/>
+                        <Separator/>
+                        <MenuItem Header="Archive" Command="local:CustomCommands.Archive" CommandParameter="{Binding}" Visibility="{Binding Archived,Converter={StaticResource ReverseBoolToVis}}"/>
+                        <MenuItem Header="UnArchive" Command="local:CustomCommands.UnArchive" CommandParameter="{Binding}" Visibility="{Binding Archived,Converter={StaticResource BoolToVisConverter}}"/>
+                        <MenuItem Header="Periods" Command="local:CustomCommands.ShowPeriods" CommandParameter="{Binding}"/>
+                        <MenuItem Header="Edit" Command="local:CustomCommands.Edit" CommandParameter="{Binding}"/>
+                    </ContextMenu>
+                </ListView.Resources>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}" >
+                        <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
+                        <EventSetter Event="MouseDoubleClick" Handler="ListViewItem_MouseDoubleClick" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <DockPanel Width="Auto" HorizontalAlignment="Stretch">
+                            <TextBlock DockPanel.Dock="Left" Text="{Binding Name}"/>
+                            <TextBlock DockPanel.Dock="Right" Text="{Binding TagsString}" HorizontalAlignment="Right"/>
+                        </DockPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </DockPanel>
     </Grid>
 </Window>

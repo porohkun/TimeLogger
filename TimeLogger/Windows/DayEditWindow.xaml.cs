@@ -82,7 +82,7 @@ namespace TimeLogger
         public void ShowDay(DateTime day)
         {
             _date = day;
-            //Title = day.ToString("dd.MM.yyyy");
+            Title = day.ToString("dd.MM.yyyy");
 
             //var tasks = new Dictionary<string, TimeSpan>();
             //TimeSpan total = new TimeSpan();

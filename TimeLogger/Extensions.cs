@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace TimeLogger
 {
@@ -18,6 +19,11 @@ namespace TimeLogger
             {
                 collection.Move(collection.IndexOf(sortableList[i]), i);
             }
+        }
+
+        public static MainWindow MainWindow(this Application app)
+        {
+            return app.MainWindow as MainWindow;
         }
     }
 }
