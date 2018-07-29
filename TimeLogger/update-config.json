@@ -1,5 +1,5 @@
 ﻿{
-  "version": "1.1.2.2",
+  "version": "1.2.8.12",
   "files": [
     {
       "name": "TimeLogger.exe",
@@ -22,6 +22,12 @@
     {
       "name": "System.Windows.Controls.Layout.Toolkit.dll",
       "url": "https://porohkun.github.io/TimeLogger/System.Windows.Controls.Layout.Toolkit.dll",
+      "path": "",
+      "action": "replace"
+    },
+    {
+      "name": "WpfControls.dll",
+      "url": "https://porohkun.github.io/TimeLogger/WpfControls.dll",
       "path": "",
       "action": "replace"
     },

@@ -29,6 +29,8 @@ namespace WixSharpSetup
                 SFAct.Install | SFAct.CopyToFtp),
             new SourceFile(@"..\..\..\TimeLogger\bin\Release\System.Windows.Controls.Layout.Toolkit.dll",
                 SFAct.Install | SFAct.CopyToFtp),
+            new SourceFile(@"..\..\..\TimeLogger\bin\Release\WPFControls.dll",
+                SFAct.Install | SFAct.CopyToFtp),
             new SourceFile(@"..\..\..\TimeLogger\bin\Release\WPFToolkit.dll",
                 SFAct.Install | SFAct.CopyToFtp),
             new SourceFile(@"..\..\..\TimeLogger\bin\Release\update-config.json",
