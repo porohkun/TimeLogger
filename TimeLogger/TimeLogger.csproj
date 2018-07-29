@@ -269,4 +269,10 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="IconStopped.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="IconTicking.ico" />
+  </ItemGroup>
 </Project>

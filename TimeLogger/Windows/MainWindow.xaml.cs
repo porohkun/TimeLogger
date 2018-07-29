@@ -50,6 +50,7 @@ namespace TimeLogger
                 if (_ticking != value)
                 {
                     _ticking = value;
+                    _notifyIcon.Icon = _ticking ? _iconTicking : _iconStopped;
                     NotifyPropertyChanged(nameof(Ticking));
                 }
             }
@@ -86,7 +87,7 @@ namespace TimeLogger
             if (dialogResult.HasValue && dialogResult.Value && win.SelectedTask != null)
             {
                 _currentTask = win.SelectedTask;
-                taskBlock.Text = string.Format("({0}) {1}", _currentTask.ID, _currentTask.Name);
+                taskBlock.Text = _currentTask.Name;
                 _timer_Tick(null, null);
                 NotifyPropertyChanged(nameof(HaveTask));
             }
@@ -164,11 +165,14 @@ namespace TimeLogger
 
         System.Windows.Forms.NotifyIcon _notifyIcon;
         System.Windows.Forms.ToolStripMenuItem _showHideMenuItem;
+        System.Drawing.Icon _iconStopped;
+        System.Drawing.Icon _iconTicking;
         void MakeIcon()
         {
-
+            _iconStopped = new System.Drawing.Icon(Application.GetResourceStream(new Uri("pack://application:,,,/TimeLogger;component/IconStopped.ico")).Stream);
+            _iconTicking = new System.Drawing.Icon(Application.GetResourceStream(new Uri("pack://application:,,,/TimeLogger;component/IconTicking.ico")).Stream);
             _notifyIcon = new System.Windows.Forms.NotifyIcon();
-            _notifyIcon.Icon = new System.Drawing.Icon(Application.GetResourceStream(new Uri("pack://application:,,,/TimeLogger;component/clock.ico")).Stream);
+            _notifyIcon.Icon = _iconStopped;
             _notifyIcon.Visible = true;
             //notifyIcon.DoubleClick += showHideMenu_Click;
             _notifyIcon.MouseClick += notifyIcon_MouseClick;
