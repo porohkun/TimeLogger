@@ -22,11 +22,11 @@ namespace TimeLogger
 		public static string AppPath => AppDomain.CurrentDomain.BaseDirectory;
 		public static string SettingsPath => Path.Combine(AppDataPath, "settings.json");
 #if DEBUG
-//		public static string TasksPath => "tasks.json";
-//#else
+        public static string TasksPath => "tasks.json";
+#else
 		public static string TasksPath => Path.Combine(AppDataPath, "tasks.json");
 #endif
-		public static string UpdateConfigUrl => "https://porohkun.github.io/TimeLogger/update-config.json";
+        public static string UpdateConfigUrl => "https://porohkun.github.io/TimeLogger/update-config.json";
 
 		public static string Title => "TimeLogger" +
 #if DEBUG
