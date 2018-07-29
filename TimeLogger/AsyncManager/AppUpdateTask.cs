@@ -22,7 +22,7 @@ namespace TimeLogger
 
         public AppUpdateTask()
         {
-
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
         }
 
         public IEnumerator<TaskStatus> DoWork()
