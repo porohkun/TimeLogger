@@ -235,7 +235,7 @@ namespace TimeLogger
         {
             var win = new JiraWindow();
             win.Owner = this;
-            win.Show();
+            win.ShowDialog();
         }
 
         #endregion

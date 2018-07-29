@@ -214,7 +214,7 @@ namespace TimeLogger
             var task = e.Parameter as Task;
             var win = new PeriodsWindow(task);
             win.Owner = this;
-            win.Show();
+            win.ShowDialog();
         }
 
         private void CommandBinding_Edit(object sender, ExecutedRoutedEventArgs e)
