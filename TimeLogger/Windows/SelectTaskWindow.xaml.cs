@@ -95,21 +95,27 @@ namespace TimeLogger
                 if (_tasks == null)
                 {
                     _tasks = new ObservableCollection<Task>(Task.GetAllTasks());
-                    _tasks.Sort((Comparison<Task>)((t1, t2) =>
-                    {
-                        if (t1.Periods.Count == 0 && t2.Periods.Count == 0)
-                            return t1.Name.CompareTo(t2.Name);
-                        else if (t1.Periods.Count == 0)
-                            return -1;
-                        else if (t2.Periods.Count == 0)
-                            return 1;
-                        else
-                            return -t1.Periods.Last().End.CompareTo(t2.Periods.Last().End);
-                    }));
+                    SortTasks();
                 }
                 return _tasks;
             }
         }
+
+        private void SortTasks()
+        {
+            _tasks.Sort((Comparison<Task>)((t1, t2) =>
+            {
+                if (t1.Periods.Count == 0 && t2.Periods.Count == 0)
+                    return t1.Name.CompareTo(t2.Name);
+                else if (t1.Periods.Count == 0)
+                    return -1;
+                else if (t2.Periods.Count == 0)
+                    return 1;
+                else
+                    return -t1.Periods.Last().End.CompareTo(t2.Periods.Last().End);
+            }));
+        }
+
         public ObservableCollection<Label> Tags => Label.Labels;
         public Task SelectedTask
         {
@@ -154,6 +160,7 @@ namespace TimeLogger
         private void RefreshView()
         {
             _tasksView.Refresh();
+            SortTasks();
             _tagsView.Refresh();
         }
 
@@ -260,6 +267,7 @@ namespace TimeLogger
             EditTask = false;
             SelectedTask.Name = SelectedTaskName;
             SelectedTask.SetTags(SelectedTaskTags);
+            RefreshView();
         }
 
         private void CancelTaskEdit_Click(object sender, RoutedEventArgs e)
