@@ -95,7 +95,17 @@ namespace TimeLogger
                 if (_tasks == null)
                 {
                     _tasks = new ObservableCollection<Task>(Task.GetAllTasks());
-                    _tasks.Sort((Comparison<Task>)((t1, t2) => { return (int)t1.ID.CompareTo((string)t2.ID); }));
+                    _tasks.Sort((Comparison<Task>)((t1, t2) =>
+                    {
+                        if (t1.Periods.Count == 0 && t2.Periods.Count == 0)
+                            return t1.Name.CompareTo(t2.Name);
+                        else if (t1.Periods.Count == 0)
+                            return -1;
+                        else if (t2.Periods.Count == 0)
+                            return 1;
+                        else
+                            return -t1.Periods.Last().End.CompareTo(t2.Periods.Last().End);
+                    }));
                 }
                 return _tasks;
             }
