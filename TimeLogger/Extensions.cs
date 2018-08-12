@@ -21,6 +21,12 @@ namespace TimeLogger
             }
         }
 
+        public static void AddRange<T>(this Collection<T> collection, IEnumerable<T> items)
+        {
+            foreach (var item in items)
+                collection.Add(item);
+        }
+
         public static MainWindow MainWindow(this Application app)
         {
             return app.MainWindow as MainWindow;

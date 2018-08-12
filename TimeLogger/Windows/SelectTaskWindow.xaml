@@ -31,7 +31,7 @@
                 <ToggleButton Grid.Column="1" Content="Archived" IsChecked="{Binding ShowArchive}"/>
             </Grid>
             <Button DockPanel.Dock="Top" Margin="5" Content="New task" Click="NewTask_Click" Visibility="{Binding ShowArchive, Converter={StaticResource ReverseBoolToVis}}"/>
-            <ListView ItemsSource="{Binding Tags, Mode=OneWay}" SelectionChanged="TagsView_SelectionChanged" Background="{DynamicResource BgrLightBrush}" HorizontalContentAlignment="Stretch">
+            <ListView ItemsSource="{Binding Tags, Mode=OneWay}" SelectionChanged="TagsView_SelectionChanged" HorizontalContentAlignment="Stretch">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <DockPanel Width="Auto" HorizontalAlignment="Stretch">
@@ -75,7 +75,7 @@
                 <Button Grid.Column="3" Grid.Row="0" Click="ApplyTaskEdit_Click" Style="{StaticResource PathButton}" local:PathDecorator.PathStyle="{StaticResource Check}" Foreground="{StaticResource PlayBrush}"/>
                 <Button Grid.Column="5" Grid.Row="0" Click="CancelTaskEdit_Click" Style="{StaticResource PathButton}" local:PathDecorator.PathStyle="{StaticResource Cross}" Foreground="{StaticResource PlayBrush}"/>
             </Grid>
-            <ListView Grid.Column="2" ItemsSource="{Binding Tasks}" SelectionMode="Single" SelectedItem="{Binding SelectedTask, Mode=TwoWay}" Background="{DynamicResource BgrLightBrush}" HorizontalContentAlignment="Stretch">
+            <ListView Grid.Column="2" ItemsSource="{Binding Tasks}" IsEnabled="{Binding EditTask, Converter={StaticResource ReverseBool}}" SelectionMode="Single" SelectedItem="{Binding SelectedTask, Mode=TwoWay}" HorizontalContentAlignment="Stretch">
                 <ListView.Resources>
                     <ContextMenu x:Key="ItemContextMenu">
                         <MenuItem Header="{Binding Name}" Focusable="False" IsHitTestVisible="False"/>

@@ -126,18 +126,7 @@ namespace TimeLogger
                 }
             }
         }
-        public IEnumerable<Label> SelectedTaskTags
-        {
-            get => _selectedTaskTags;
-            set
-            {
-                if (_selectedTaskTags != value)
-                {
-                    _selectedTaskTags = value;
-                    NotifyPropertyChanged(nameof(SelectedTaskTags));
-                }
-            }
-        }
+        public ObservableCollection<Label> SelectedTaskTags { get; set; } = new ObservableCollection<Label>();
 
 
         public SelectTaskWindow()
@@ -221,7 +210,8 @@ namespace TimeLogger
         {
             EditTask = true;
             SelectedTaskName = SelectedTask.Name;
-            SelectedTaskTags = SelectedTask.Tags.ToList();
+            SelectedTaskTags.Clear();
+            SelectedTaskTags.AddRange(SelectedTask.Tags);
             TaskNameTextBox.Focus();
             TaskNameTextBox.SelectAll();
         }
@@ -242,6 +232,7 @@ namespace TimeLogger
                 label.Selected = true;
             foreach (Label label in e.RemovedItems)
                 label.Selected = false;
+            EditTask = false;
             RefreshView();
         }
 

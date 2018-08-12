@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -22,20 +23,16 @@ namespace TimeLogger
     /// </summary>
     public partial class TagsControl : UserControl
     {
-        public static readonly DependencyProperty TagsProperty =
-          DependencyProperty.Register("Tags", typeof(List<Label>), typeof(TagsControl), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnTagsPropertyChanged)) { BindsTwoWayByDefault = true });
+        public static readonly DependencyProperty TagsProperty = DependencyProperty.Register("Tags",
+              typeof(ObservableCollection<Label>),
+              typeof(TagsControl),
+              new FrameworkPropertyMetadata(new ObservableCollection<Label>()) { BindsTwoWayByDefault = true });
 
-        //public List<Label> Tags { get; set; }
-
-
-
-        public List<Label> Tags
+        public ObservableCollection<Label> Tags
         {
-            get => (List<Label>)GetValue(TagsProperty);
+            get => (ObservableCollection<Label>)GetValue(TagsProperty);
             set => SetValue(TagsProperty, value);
         }
-
-
 
         public event Action<Label> TagAdded;
         public event Action<Label> TagRemoved;
@@ -45,55 +42,35 @@ namespace TimeLogger
             InitializeComponent();
         }
 
-        private static void OnTagsPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var tags = d as TagsControl;
-
-            tags.SetValue(TagsProperty, e.NewValue);
-            tags.Tags = (List<Label>)e.NewValue;
-
-            tags.RefreshTags();
-        }
-
         private void RefreshTags()
         {
-            if (Tags == null) return;
-            for (var i = 0; i < Tags.Count; i++)
-            {
-                if (i < panel.Children.Count - 1)
-                    SetTagToButton(panel.Children[i] as Button, Tags[i]);
-                else
-                    panel.Children.Insert(i, NewButton(Tags[i]));
-            }
-            while (Tags.Count < panel.Children.Count - 1)
-                panel.Children.RemoveAt(panel.Children.Count - 2);
             if (newTagBox.Editor != null)
                 newTagBox.Editor.Text = "";
         }
 
-        private void SetTagToButton(Button button, Label label)
-        {
-            button.Content = label.Name;
-            button.Tag = label;
-        }
+        //private void SetTagToButton(Button button, Label label)
+        //{
+        //    button.Content = label.Name;
+        //    button.Tag = label;
+        //}
 
-        private Button NewButton(Label label)
-        {
-            var button = new Button();
-            button.Margin = new Thickness(3);
-            button.Loaded += Button_Loaded;
-            button.Click += Button_Click;
-            SetTagToButton(button, label);
-            button.ContextMenu = Resources["popup"] as ContextMenu;
-            return button;
-        }
+        //private Button NewButton(Label label)
+        //{
+        //    var button = new Button();
+        //    button.Margin = new Thickness(3);
+        //    button.Loaded += Button_Loaded;
+        //    button.Click += Button_Click;
+        //    SetTagToButton(button, label);
+        //    button.ContextMenu = Resources["popup"] as ContextMenu;
+        //    return button;
+        //}
 
-        private void Button_Loaded(object sender, RoutedEventArgs e)
-        {
-            var button = (Button)sender;
-            ((Border)button.Template.FindName("Part_Border", button)).CornerRadius = new CornerRadius(4);
-            ((ContentPresenter)button.Template.FindName("Part_ContentPresenter", button)).Margin = new Thickness(3, 0, 3, 0);
-        }
+        //private void Button_Loaded(object sender, RoutedEventArgs e)
+        //{
+        //    var button = (Button)sender;
+        //    ((Border)button.Template.FindName("Part_Border", button)).CornerRadius = new CornerRadius(4);
+        //    ((ContentPresenter)button.Template.FindName("Part_ContentPresenter", button)).Margin = new Thickness(3, 0, 3, 0);
+        //}
 
         private void ButtonPopup_Click(object sender, RoutedEventArgs e)
         {
@@ -125,8 +102,11 @@ namespace TimeLogger
                 if (!string.IsNullOrEmpty(tag))
                 {
                     var lab = Label.GetLabelByName(tag);
-                    Tags.Add(lab);
-                    TagAdded?.Invoke(lab);
+                    if (!Tags.Any(l => l.Name == lab.Name))
+                    {
+                        Tags.Add(lab);
+                        TagAdded?.Invoke(lab);
+                    }
                 }
             Label.Labels.Sort();
             RefreshTags();
