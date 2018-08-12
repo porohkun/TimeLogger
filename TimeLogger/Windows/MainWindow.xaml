@@ -79,7 +79,7 @@
                     </MultiBinding>
                 </Button.IsEnabled>
             </Button>
-            <CheckBox Grid.Column="0" Grid.Row="2" IsChecked="{Binding TopMost}"
+            <CheckBox Grid.Column="0" Grid.Row="2" IsChecked="{Binding Path=Topmost, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                       Style="{StaticResource PathCheckbox}"
                       local:PathDecorator.PathStyle="{StaticResource Pin}"/>
             <Button Grid.Column="2" Grid.Row="2" Click="infoButton_Click"
