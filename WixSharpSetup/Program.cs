@@ -95,6 +95,9 @@ namespace WixSharpSetup
                     System.IO.File.Delete(file);
                 foreach (var file in SourceFiles.Where(f => f.HaveAction(SFAct.CopyToFtp)))
                     System.IO.File.Copy(file.FullPath, Path.Combine("Upload", file.Name));
+                
+                foreach (var file in SourceFiles.Where(f => f.Name == "update-config.json"))
+                    System.IO.File.Copy(file.FullPath, Path.Combine("../../../docs", file.Name));
 
             }
             catch (Exception e)
