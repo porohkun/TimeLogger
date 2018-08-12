@@ -99,5 +99,13 @@ namespace TimeLogger
             Labels.Add(label);
             return label;
         }
+
+        internal static void UnselectAll()
+        {
+            foreach (var label in Labels)
+            {
+                label.Selected = false;
+            }
+        }
     }
 }

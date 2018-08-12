@@ -60,7 +60,6 @@ namespace TimeLogger
         private CollectionView _tagsView;
         private Task _selectedTask;
         private string _selectedTaskName;
-        private IEnumerable<Label> _selectedTaskTags;
 
         public bool ShowArchive
         {
@@ -72,6 +71,7 @@ namespace TimeLogger
                     _showArchive = value;
                     EditTask = false;
                     NotifyPropertyChanged(nameof(ShowArchive));
+                    Label.UnselectAll();
                     RefreshView();
                 }
             }
@@ -138,6 +138,7 @@ namespace TimeLogger
             _tasksView.Filter = TaskFilter;
             _tagsView = (CollectionView)CollectionViewSource.GetDefaultView(Tags);
             _tagsView.Filter = TagFilter;
+            RefreshView();
         }
 
         private void RefreshView()
@@ -223,6 +224,7 @@ namespace TimeLogger
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
+            Label.UnselectAll();
             MainWindow.SaveAll();
         }
 
