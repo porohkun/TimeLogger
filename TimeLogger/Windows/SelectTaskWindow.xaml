@@ -15,6 +15,10 @@
         <CommandBinding Command="local:CustomCommands.ShowPeriods" Executed="CommandBinding_ShowPeriods" CanExecute="CommonCommandBinding_CanExecute" />
         <CommandBinding Command="local:CustomCommands.Edit"        Executed="CommandBinding_Edit"        CanExecute="CommonCommandBinding_CanExecute" />
     </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Key="F2"
+                    Command="local:CustomCommands.Edit" />
+    </Window.InputBindings>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="180"/>
