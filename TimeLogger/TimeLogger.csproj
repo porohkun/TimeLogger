@@ -90,6 +90,7 @@
     <Compile Include="Controls\DateTimePicker.xaml.cs">
       <DependentUpon>DateTimePicker.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ItemsControlWithCustomContainer.cs" />
     <Compile Include="Controls\TagsControl.xaml.cs">
       <DependentUpon>TagsControl.xaml</DependentUpon>
     </Compile>
