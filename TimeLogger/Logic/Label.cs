@@ -97,6 +97,7 @@ namespace TimeLogger
                 return label;
             label = new Label() { Name = tag };
             Labels.Add(label);
+            Labels.Sort((Comparison<Label>)((l1, l2) => { return l1.Name.CompareTo(l2.Name); }));
             return label;
         }
 
