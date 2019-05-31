@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using WpfControls.Editors;
+using AutoCompleteTextBox.Editors;
 using System.ComponentModel;
 
 namespace TimeLogger

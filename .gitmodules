@@ -1,3 +1,6 @@
 [submodule "MimiJson"]
 	path = MimiJson
 	url = ../MimiJson.git
+[submodule "WPF-AutoComplete-TextBox"]
+	path = WPF-AutoComplete-TextBox
+	url = ../WPF-AutoComplete-TextBox.git
