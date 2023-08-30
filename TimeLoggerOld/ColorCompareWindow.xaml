@@ -1,0 +1,181 @@
+﻿<Window x:Class="TimeLoggerOld.ColorCompareWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TimeLoggerOld"
+        mc:Ignorable="d"
+        Background="{StaticResource BgrMainBrush}"
+        Title="ColorCompareWindow" Height="450" Width="400">
+    <Window.Resources>
+        <Style TargetType="ContentControl">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ContentControl">
+                        <Border BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}">
+                            <DockPanel>
+                                <Path Style="{StaticResource Chart}" DockPanel.Dock="Left"
+                                      Width="20" Height="20"
+                                      Margin="5,0"
+                                      Fill="{TemplateBinding local:PathDecorator.PathColor}"/>
+                                <TextBlock Text="{TemplateBinding Name}"
+                                           Foreground="{TemplateBinding Foreground}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                            </DockPanel>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid Margin="10,10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="140"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="24"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="24"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="24"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="24"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <ContentControl Grid.Row="0" Name="Main"
+                        BorderThickness="1"
+                        Foreground="{StaticResource TextMainBrush}"
+                        local:PathDecorator.PathColor="{StaticResource PathMainBrush}"
+                        Background="{StaticResource ButtonMainBrush}"
+                        BorderBrush="{StaticResource BorderMainBrush}"/>
+        <ContentControl Grid.Row="2" Name="Focused"
+                        BorderThickness="1"
+                        Foreground="{StaticResource TextFocusedBrush}"
+                        local:PathDecorator.PathColor="{StaticResource PathFocusedBrush}"
+                        Background="{StaticResource ButtonFocusedBrush}"
+                        BorderBrush="{StaticResource BorderFocusedBrush}"/>
+        <ContentControl Grid.Row="4" Name="Selected"
+                        BorderThickness="1"
+                        Foreground="{StaticResource TextSelectedBrush}"
+                        local:PathDecorator.PathColor="{StaticResource PathSelectedBrush}"
+                        Background="{StaticResource ButtonSelectedBrush}"
+                        BorderBrush="{StaticResource BorderSelectedBrush}"/>
+        <ContentControl Grid.Row="6" Name="FocusedSelected"
+                        BorderThickness="1"
+                        Foreground="{StaticResource TextFocusedSelectedBrush}"
+                        local:PathDecorator.PathColor="{StaticResource PathFocusedSelectedBrush}"
+                        Background="{StaticResource ButtonFocusedSelectedBrush}"
+                        BorderBrush="{StaticResource BorderFocusedSelectedBrush}"/>
+        <ContentControl Grid.Row="8" Name="Disabled"
+                        BorderThickness="1"
+                        Foreground="{StaticResource TextDisabledBrush}"
+                        local:PathDecorator.PathColor="{StaticResource PathDisabledBrush}"
+                        Background="{StaticResource ButtonDisabledBrush}"
+                        BorderBrush="{StaticResource BorderDisabledBrush}"/>
+        <ContentControl Grid.Row="10" Name="Main2"
+                        BorderThickness="0"
+                        Foreground="{StaticResource TextMainBrush}"
+                        local:PathDecorator.PathColor="{StaticResource PathMainBrush}"
+                        Background="{StaticResource ButtonMainBrush}"
+                        BorderBrush="{StaticResource BorderMainBrush}"/>
+        <ContentControl Grid.Row="12" Name="Focused2"
+                        BorderThickness="0"
+                        Foreground="{StaticResource TextFocusedBrush}"
+                        local:PathDecorator.PathColor="{StaticResource PathFocusedBrush}"
+                        Background="{StaticResource ButtonFocusedBrush}"
+                        BorderBrush="{StaticResource BorderFocusedBrush}"/>
+        <ContentControl Grid.Row="14" Name="Selected2"
+                        BorderThickness="0"
+                        Foreground="{StaticResource TextSelectedBrush}"
+                        local:PathDecorator.PathColor="{StaticResource PathSelectedBrush}"
+                        Background="{StaticResource ButtonSelectedBrush}"
+                        BorderBrush="{StaticResource BorderSelectedBrush}"/>
+        <ContentControl Grid.Row="16" Name="FocusedSelected2"
+                        BorderThickness="0"
+                        Foreground="{StaticResource TextFocusedSelectedBrush}"
+                        local:PathDecorator.PathColor="{StaticResource PathFocusedSelectedBrush}"
+                        Background="{StaticResource ButtonFocusedSelectedBrush}"
+                        BorderBrush="{StaticResource BorderFocusedSelectedBrush}"/>
+        <ContentControl Grid.Row="18" Name="Disabled2"
+                        BorderThickness="0"
+                        Foreground="{StaticResource TextDisabledBrush}"
+                        local:PathDecorator.PathColor="{StaticResource PathDisabledBrush}"
+                        Background="{StaticResource ButtonDisabledBrush}"
+                        BorderBrush="{StaticResource BorderDisabledBrush}"/>
+
+        <Rectangle Grid.Column="2" Grid.Row="0" Fill="{StaticResource ButtonMainBrush}"/>
+        <Rectangle Grid.Column="2" Grid.Row="2" Fill="{StaticResource ButtonFocusedBrush}"/>
+        <Rectangle Grid.Column="2" Grid.Row="4" Fill="{StaticResource ButtonSelectedBrush}"/>
+        <Rectangle Grid.Column="2" Grid.Row="6" Fill="{StaticResource ButtonFocusedSelectedBrush}"/>
+        <Rectangle Grid.Column="2" Grid.Row="8" Fill="{StaticResource ButtonDisabledBrush}"/>
+        <Label Grid.Column="2" Grid.Row="10" Grid.RowSpan="5" HorizontalContentAlignment="Right">
+            <TextBlock Text="Button">
+                <TextBlock.LayoutTransform>
+                    <RotateTransform Angle="-90"/>
+                </TextBlock.LayoutTransform>
+            </TextBlock>
+        </Label>
+
+        <Rectangle Grid.Column="4" Grid.Row="0" Fill="{StaticResource BorderMainBrush}"/>
+        <Rectangle Grid.Column="4" Grid.Row="2" Fill="{StaticResource BorderFocusedBrush}"/>
+        <Rectangle Grid.Column="4" Grid.Row="4" Fill="{StaticResource BorderSelectedBrush}"/>
+        <Rectangle Grid.Column="4" Grid.Row="6" Fill="{StaticResource BorderFocusedSelectedBrush}"/>
+        <Rectangle Grid.Column="4" Grid.Row="8" Fill="{StaticResource BorderDisabledBrush}"/>
+        <Label Grid.Column="4" Grid.Row="10" Grid.RowSpan="5" HorizontalContentAlignment="Right">
+            <TextBlock Text="Border">
+                <TextBlock.LayoutTransform>
+                    <RotateTransform Angle="-90"/>
+                </TextBlock.LayoutTransform>
+            </TextBlock>
+        </Label>
+
+        <Rectangle Grid.Column="6" Grid.Row="0" Fill="{StaticResource TextMainBrush}"/>
+        <Rectangle Grid.Column="6" Grid.Row="2" Fill="{StaticResource TextFocusedBrush}"/>
+        <Rectangle Grid.Column="6" Grid.Row="4" Fill="{StaticResource TextSelectedBrush}"/>
+        <Rectangle Grid.Column="6" Grid.Row="6" Fill="{StaticResource TextFocusedSelectedBrush}"/>
+        <Rectangle Grid.Column="6" Grid.Row="8" Fill="{StaticResource TextDisabledBrush}"/>
+        <Label Grid.Column="6" Grid.Row="10" Grid.RowSpan="5" HorizontalContentAlignment="Right">
+            <TextBlock Text="Text">
+                <TextBlock.LayoutTransform>
+                    <RotateTransform Angle="-90"/>
+                </TextBlock.LayoutTransform>
+            </TextBlock>
+        </Label>
+
+        <Rectangle Grid.Column="8" Grid.Row="0" Fill="{StaticResource PathMainBrush}"/>
+        <Rectangle Grid.Column="8" Grid.Row="2" Fill="{StaticResource PathFocusedBrush}"/>
+        <Rectangle Grid.Column="8" Grid.Row="4" Fill="{StaticResource PathSelectedBrush}"/>
+        <Rectangle Grid.Column="8" Grid.Row="6" Fill="{StaticResource PathFocusedSelectedBrush}"/>
+        <Rectangle Grid.Column="8" Grid.Row="8" Fill="{StaticResource PathDisabledBrush}"/>
+        <Label Grid.Column="8" Grid.Row="10" Grid.RowSpan="5" HorizontalContentAlignment="Right">
+            <TextBlock Text="Path">
+                <TextBlock.LayoutTransform>
+                    <RotateTransform Angle="-90"/>
+                </TextBlock.LayoutTransform>
+            </TextBlock>
+        </Label>
+    </Grid>
+</Window>

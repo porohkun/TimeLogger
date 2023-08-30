@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34009.444
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeLogger", "TimeLogger\TimeLogger.csproj", "{3597A286-9F30-419A-ADAD-AB5A156CACA1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeLoggerOld", "TimeLoggerOld\TimeLoggerOld.csproj", "{3597A286-9F30-419A-ADAD-AB5A156CACA1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeLoggerApp", "TimeLoggerApp\TimeLoggerApp.csproj", "{215796CF-2E22-4C3B-9C0A-1645C544F05A}"
 EndProject

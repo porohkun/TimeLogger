@@ -1,0 +1,76 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:TimeLoggerOld">
+
+    <Color x:Key="White">#FFFFFF</Color>
+    <Color x:Key="LightLightGray">#F1F1F1</Color>
+    <Color x:Key="LightGray">#E1E1E1</Color>
+    <Color x:Key="Gray">#A1A1A1</Color>
+    <Color x:Key="MediumGray">#818181</Color>
+    <Color x:Key="DarkGray">#616161</Color>
+    <Color x:Key="MediumDarkGray">#515151</Color>
+    <Color x:Key="DarkDarkGray">#414141</Color>
+    <Color x:Key="Black">#000000</Color>
+
+    <Color x:Key="WhiteBlueGray">#CBEEFF</Color>
+
+    <Color x:Key="BlueGray2">#34637a</Color>
+    <Color x:Key="BlueGray1">#3a5765</Color>
+    <Color x:Key="BlueGray0">#3e4c54</Color>
+
+    <Color x:Key="LightBlueGray2">#09aefd</Color>
+    <Color x:Key="LightBlueGray1">#26a0da</Color>
+    <Color x:Key="LightBlueGray0">#2f7fa6</Color>
+    <!--<Color x:Key="LightBlueBlueGray">#26A0dA</Color>-->
+    <!--<Color x:Key="LightBlueGray">#2F7FA6</Color>-->
+    <!--<Color x:Key="BlueBlueGray">#3A5765</Color>-->
+    <!--<Color x:Key="BlueGray">#3E4C54</Color>-->
+
+    <Color x:Key="LightLightBlue">#aad7ff</Color>
+    <Color x:Key="LightBlue">#7ac1ff</Color>
+    <Color x:Key="DarkBlue">#4479a7</Color>
+
+    <Color x:Key="LightLightGreen">#beebbc</Color>
+    <Color x:Key="LightGreen">#8dd28a</Color>
+    <Color x:Key="DarkGreen">#497646</Color>
+
+    <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource White}" />
+    <SolidColorBrush x:Key="BlackBrush" Color="{StaticResource Black}" />
+
+    <SolidColorBrush x:Key="PathMainBrush" Color="{StaticResource LightGray}" />
+    <SolidColorBrush x:Key="PathFocusedBrush" Color="{StaticResource WhiteBlueGray}" />
+    <SolidColorBrush x:Key="PathSelectedBrush" Color="{StaticResource LightBlue}" />
+    <SolidColorBrush x:Key="PathFocusedSelectedBrush" Color="{StaticResource LightLightBlue}" />
+    <SolidColorBrush x:Key="PathDisabledBrush" Color="{StaticResource MediumGray}" />
+
+    <SolidColorBrush x:Key="PlayBrush" Color="{StaticResource LightGreen}" />
+    <SolidColorBrush x:Key="PlayFocusedBrush" Color="{StaticResource LightLightGreen}" />
+    <SolidColorBrush x:Key="PlayDisabledBrush" Color="{StaticResource MediumGray}" />
+
+    <SolidColorBrush x:Key="PauseBrush" Color="{StaticResource LightBlue}" />
+    <SolidColorBrush x:Key="PauseFocusedBrush" Color="{StaticResource LightLightBlue}" />
+    <SolidColorBrush x:Key="PauseDisabledBrush" Color="{StaticResource MediumGray}" />
+
+    <SolidColorBrush x:Key="BorderMainBrush" Color="{StaticResource Gray}" />
+    <SolidColorBrush x:Key="BorderFocusedBrush" Color="{StaticResource LightBlueGray0}" />
+    <SolidColorBrush x:Key="BorderSelectedBrush" Color="{StaticResource LightBlueGray1}" />
+    <SolidColorBrush x:Key="BorderFocusedSelectedBrush" Color="{StaticResource LightBlueGray2}" />
+    <SolidColorBrush x:Key="BorderDisabledBrush" Color="{StaticResource MediumGray}" />
+
+    <SolidColorBrush x:Key="TextMainBrush" Color="{StaticResource LightLightGray}" />
+    <SolidColorBrush x:Key="TextFocusedBrush" Color="{StaticResource WhiteBlueGray}" />
+    <SolidColorBrush x:Key="TextSelectedBrush" Color="{StaticResource LightLightGray}" />
+    <SolidColorBrush x:Key="TextFocusedSelectedBrush" Color="{StaticResource White}" />
+    <SolidColorBrush x:Key="TextDisabledBrush" Color="{StaticResource MediumGray}" />
+
+    <SolidColorBrush x:Key="ButtonMainBrush" Color="{StaticResource DarkDarkGray}" />
+    <SolidColorBrush x:Key="ButtonFocusedBrush" Color="{StaticResource BlueGray0}" />
+    <SolidColorBrush x:Key="ButtonSelectedBrush" Color="{StaticResource BlueGray1}" />
+    <SolidColorBrush x:Key="ButtonFocusedSelectedBrush" Color="{StaticResource BlueGray2}" />
+    <SolidColorBrush x:Key="ButtonDisabledBrush" Color="{StaticResource DarkDarkGray}" />
+
+    <SolidColorBrush x:Key="BgrLightBrush" Color="{StaticResource DarkGray}" />
+    <SolidColorBrush x:Key="BgrMainBrush" Color="{StaticResource DarkDarkGray}" />
+    <SolidColorBrush x:Key="BgrFocusedBrush" Color="{StaticResource MediumDarkGray}" />
+
+</ResourceDictionary>
