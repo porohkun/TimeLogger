@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>TimeLogger</RootNamespace>
     <AssemblyName>TimeLogger</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -65,10 +65,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MimiJson\MimiJson\MimiJson.Net45.csproj">
-      <Project>{9e323f98-86b0-490c-9f6a-5de574d8dbfb}</Project>
-      <Name>MimiJson.Net45</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WPF-AutoComplete-TextBox\AutoCompleteTextBox\AutoCompleteTextBox\AutoCompleteTextBox.csproj">
       <Project>{fa105c18-2033-4a24-845b-08b00228f9f9}</Project>
       <Name>AutoCompleteTextBox</Name>
