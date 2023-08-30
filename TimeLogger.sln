@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeLoggerApp", "TimeLogger
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoCompleteTextBox", "WPF-AutoComplete-TextBox\AutoCompleteTextBox\AutoCompleteTextBox\AutoCompleteTextBox.csproj", "{FA105C18-2033-4A24-845B-08B00228F9F9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeLogger", "TimeLogger\TimeLogger.csproj", "{2ECD1C8E-46ED-4F9A-86DB-D21C85F4285C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{FA105C18-2033-4A24-845B-08B00228F9F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA105C18-2033-4A24-845B-08B00228F9F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA105C18-2033-4A24-845B-08B00228F9F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2ECD1C8E-46ED-4F9A-86DB-D21C85F4285C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2ECD1C8E-46ED-4F9A-86DB-D21C85F4285C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2ECD1C8E-46ED-4F9A-86DB-D21C85F4285C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2ECD1C8E-46ED-4F9A-86DB-D21C85F4285C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
