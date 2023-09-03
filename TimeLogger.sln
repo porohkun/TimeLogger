@@ -9,7 +9,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeLoggerApp", "TimeLogger
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoCompleteTextBox", "WPF-AutoComplete-TextBox\AutoCompleteTextBox\AutoCompleteTextBox\AutoCompleteTextBox.csproj", "{FA105C18-2033-4A24-845B-08B00228F9F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeLogger", "TimeLogger\TimeLogger.csproj", "{2ECD1C8E-46ED-4F9A-86DB-D21C85F4285C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeLogger", "TimeLogger\TimeLogger.csproj", "{2ECD1C8E-46ED-4F9A-86DB-D21C85F4285C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeLogger.DataAccess", "TimeLogger.DataAccess\TimeLogger.DataAccess.csproj", "{5C14BE4B-A26A-44D5-9BAB-A1AC495E9000}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeLogger.Domain", "TimeLogger.Domain\TimeLogger.Domain.csproj", "{8FA149FB-F6C3-4BE8-8DF6-F223D1D9EEA5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeLogger.Shared", "TimeLogger.Shared\TimeLogger.Shared.csproj", "{A9E853E1-19B2-4B7E-8DB9-471350C088CA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CBE38FF9-DBE6-4718-8611-4876F0E43B1E}"
+	ProjectSection(SolutionItems) = preProject
+		add_migration.bat = add_migration.bat
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +46,18 @@ Global
 		{2ECD1C8E-46ED-4F9A-86DB-D21C85F4285C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2ECD1C8E-46ED-4F9A-86DB-D21C85F4285C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2ECD1C8E-46ED-4F9A-86DB-D21C85F4285C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C14BE4B-A26A-44D5-9BAB-A1AC495E9000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C14BE4B-A26A-44D5-9BAB-A1AC495E9000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C14BE4B-A26A-44D5-9BAB-A1AC495E9000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C14BE4B-A26A-44D5-9BAB-A1AC495E9000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FA149FB-F6C3-4BE8-8DF6-F223D1D9EEA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FA149FB-F6C3-4BE8-8DF6-F223D1D9EEA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FA149FB-F6C3-4BE8-8DF6-F223D1D9EEA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FA149FB-F6C3-4BE8-8DF6-F223D1D9EEA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9E853E1-19B2-4B7E-8DB9-471350C088CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9E853E1-19B2-4B7E-8DB9-471350C088CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9E853E1-19B2-4B7E-8DB9-471350C088CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9E853E1-19B2-4B7E-8DB9-471350C088CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

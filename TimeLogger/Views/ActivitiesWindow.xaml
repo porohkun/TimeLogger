@@ -1,0 +1,176 @@
+﻿<Window x:Class="TimeLogger.Views.ActivitiesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:a="clr-namespace:TimeLogger.Abstractions"
+        xmlns:mvvm="clr-namespace:TimeLogger.MVVM"
+        xmlns:vm="clr-namespace:TimeLogger.ViewModels"
+        xmlns:misc="clr-namespace:TimeLogger.Misc"
+        xmlns:views="clr-namespace:TimeLogger.Views" Title="Activities"
+        Width="600"
+        Height="400"
+        d:DataContext="{d:DesignInstance vm:ActivitiesWindowViewModelDesignDummy,
+                                           IsDesignTimeCreatable=True}"
+        mvvm:ViewModelLocator.ViewModel="{x:Type a:IActivitiesWindowViewModel}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        WindowStartupLocation="CenterScreen"
+        Style="{StaticResource {x:Type Window}}"
+        mc:Ignorable="d">
+    <Window.Resources>
+         <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="{x:Type Button}">
+             <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+         </Style>
+    </Window.Resources>
+    <materialDesign:DialogHost DialogMargin="8"
+                               Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
+        <materialDesign:DialogHost.DialogContent>
+              <StackPanel Orientation="Vertical" Margin="16">
+                  <Grid Margin="0,20">
+                      <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="Auto" MinWidth="60"/>
+                          <ColumnDefinition Width="*"/>
+                      </Grid.ColumnDefinitions>
+                      <Grid.RowDefinitions>
+                          <RowDefinition Height="Auto"/>
+                          <RowDefinition Height="Auto"/>
+                      </Grid.RowDefinitions>
+                      
+                      <TextBlock Grid.Column="0" Text="Key" />
+                      <TextBlock Grid.Column="1" Text="Name" />
+                      <TextBox Grid.Column="0" Grid.Row="1"
+                               Margin="2,0"
+                               WindowChrome.IsHitTestVisibleInChrome="True"
+                               Text="{Binding EditingActivity.Key, Mode=TwoWay}" />
+                      <TextBox Grid.Column="1" Grid.Row="1"
+                               Margin="2,0"
+                               WindowChrome.IsHitTestVisibleInChrome="True"
+                               Text="{Binding EditingActivity.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                          <TextBox.InputBindings>
+                              <KeyBinding Key="Return" Command="{Binding CreateNewActivityCommand}" />
+                          </TextBox.InputBindings>
+                      </TextBox>
+                  </Grid>
+                  <!--<local:TagsControl Grid.Row="2"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="4"
+                  Tags="{Binding SelectedTaskTags}" />-->
+                  <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                      <Button Margin="0,0,30,0"
+                              Command="{Binding CreateNewActivityCommand}"
+                              Content="OK"/>
+                      <Button Margin="30,0,0,0"
+                              Command="{Binding CancelNewActivityCommand}"
+                              Content="Cancel"/>
+                  </StackPanel>
+              </StackPanel>
+        </materialDesign:DialogHost.DialogContent>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="180" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <DockPanel Grid.Column="0" Margin="5,5,0,5">
+                <Grid DockPanel.Dock="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <ToggleButton Grid.Column="0"
+                                  Content="Active"
+                                  IsChecked="{Binding ShowArchive, Converter={StaticResource ReverseBool}}" />
+                    <ToggleButton Grid.Column="1"
+                                  Content="Archived"
+                                  IsChecked="{Binding ShowArchive}" />
+                </Grid>
+                <Button Margin="5"
+                        Content="New task"
+                        DockPanel.Dock="Top"
+                        Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+                        Visibility="{Binding ShowArchive, Converter={StaticResource ReverseBoolToVis}}" />
+                <ListBox HorizontalContentAlignment="Stretch"
+                         WindowChrome.IsHitTestVisibleInChrome="True"
+                         ItemsSource="{Binding Tags, Mode=OneWay}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <DockPanel Width="Auto" HorizontalAlignment="Stretch">
+                                <materialDesign:PackIcon Width="14"
+                                                         Height="14"
+                                                         Kind="TagOutline" />
+                                <TextBlock Margin="4,0"
+                                           DockPanel.Dock="Left"
+                                           Text="{Binding Name}" />
+                                <TextBlock HorizontalAlignment="Right"
+                                           DockPanel.Dock="Right"
+                                           Text="{Binding ActivitiesCount}" />
+                            </DockPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+            
+            <GridSplitter Grid.Row="0"
+                          Grid.Column="1"
+                          HorizontalAlignment="Stretch"
+                          WindowChrome.IsHitTestVisibleInChrome="True"
+                          Background="{DynamicResource BgrMainBrush}"
+                          Foreground="{DynamicResource BorderMainBrush}" />
+            
+            <ListView Grid.Column="2"
+                      Margin="0,5,5,5"
+                      HorizontalContentAlignment="Stretch"
+                      WindowChrome.IsHitTestVisibleInChrome="True"
+                      IsEnabled="{Binding EditTask, Converter={StaticResource ReverseBool}}"
+                      ItemsSource="{Binding Activities}"
+                      SelectedItem="{Binding SelectedActivity, Mode=TwoWay}"
+                      SelectionMode="Single">
+                <ListView.Resources>
+                    <ContextMenu x:Key="ItemContextMenu" MaxWidth="240">
+                        <MenuItem Focusable="False"
+                                  Header="{Binding Name}"
+                                  IsHitTestVisible="False" />
+                        <Separator />
+                        <MenuItem Command="{Binding SelectCommand}"
+                                  CommandParameter="{Binding}"
+                                  Header="Select" />
+                        <MenuItem Command="{Binding ArchiveCommand}"
+                                  CommandParameter="{Binding}"
+                                  Header="Archive"
+                                  Visibility="{Binding Archived, Converter={StaticResource ReverseBoolToVis}}" />
+                        <MenuItem Command="{Binding UnArchiveCommand}"
+                                  CommandParameter="{Binding}"
+                                  Header="UnArchive"
+                                  Visibility="{Binding Archived, Converter={StaticResource BoolToVisConverter}}" />
+                        <MenuItem Command="{Binding ShowPeriodsCommand}"
+                                  CommandParameter="{Binding}"
+                                  Header="Periods" />
+                        <MenuItem Command="{Binding DataContext.EditActivityCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                  CommandParameter="{Binding}"
+                                  Header="Edit" />
+                    </ContextMenu>
+                </ListView.Resources>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}"/>
+                        <Setter Property="misc:DoubleClick.Command" Value="{Binding SelectCommand}"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid WindowChrome.IsHitTestVisibleInChrome="True">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Name}" />
+                            <TextBlock Grid.Column="1" Text="Binding TagsString" />
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+    </materialDesign:DialogHost>
+</Window>

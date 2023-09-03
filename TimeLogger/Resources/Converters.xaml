@@ -1,0 +1,11 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:TimeLogger.Converters">
+    <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+    <c:ReverseBooleanConverter x:Key="ReverseBool" />
+    <c:BooleanAndConverter x:Key="BoolAndConverter" />
+    <c:BooleanToColorArchivedConverter x:Key="BoolToColor" />
+    <c:ReverseBooleanToVisibilityConverter x:Key="ReverseBoolToVis" />
+    <c:SelectValueByBoolConverter x:Key="ValByBoolConverter" />
+</ResourceDictionary>

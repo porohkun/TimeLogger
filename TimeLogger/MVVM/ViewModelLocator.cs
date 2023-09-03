@@ -1,7 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows;
 
 namespace TimeLogger.MVVM
@@ -9,7 +7,7 @@ namespace TimeLogger.MVVM
     public static class ViewModelLocator
     {
         public static DependencyProperty ViewModelProperty =
-            DependencyProperty.RegisterAttached("ViewModel", typeof(Type), typeof(ViewModelLocator), new PropertyMetadata(null, ViewModelChanged));
+            DependencyProperty.RegisterAttached("ViewModel", typeof(Type), typeof(ViewModelLocator), new PropertyMetadata(typeof(object), ViewModelChanged));
 
         public static Type GetViewModel(DependencyObject obj)
         {
@@ -37,17 +35,6 @@ namespace TimeLogger.MVVM
             {
                 frameworkElement.DataContext = viewModel;
             }
-        }
-
-        public static IServiceCollection AddViewModelLocator(this IServiceCollection services)
-        {
-            var viewModelTypes = AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes())
-                .Where(t => !t.IsAbstract && typeof(ViewModelBase).IsAssignableFrom(t));
-
-            foreach (var viewModelType in viewModelTypes)
-                services.AddTransient(viewModelType);
-
-            return services;
         }
     }
 }

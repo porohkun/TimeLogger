@@ -1,0 +1,103 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:misc="clr-namespace:TimeLogger.Misc"
+                    xmlns:v="clr-namespace:TimeLogger.Views"
+                    xmlns:controls="clr-namespace:TimeLogger.Controls">
+    <Style x:Key="CloseButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="BorderBrush" Value="{x:Null}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
+        <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="misc:PathDecorator.PathStyle" Value="{x:Null}" />
+        <Setter Property="misc:PathDecorator.PathThickness" Value="1" />
+        <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+        <Setter Property="RenderOptions.EdgeMode" Value="Aliased" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Width="{TemplateBinding Width}"
+                            Height="{TemplateBinding Height}"
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="0">
+                        <Path x:Name="PathIcon"
+                              Width="{TemplateBinding misc:PathDecorator.PathWidth}"
+                              Height="{TemplateBinding misc:PathDecorator.PathHeight}"
+                              Stroke="{TemplateBinding Foreground}"
+                              StrokeThickness="{TemplateBinding misc:PathDecorator.PathThickness}"
+                              Style="{TemplateBinding misc:PathDecorator.PathStyle}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter Property="Background" Value="Red" />
+                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="true">
+                <Setter Property="Background" Value="IndianRed" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style BasedOn="{StaticResource {x:Type Window}}" TargetType="{x:Type Window}">
+        <Setter Property="ShowInTaskbar" Value="False" />
+        <Setter Property="WindowChrome.WindowChrome">
+            <Setter.Value>
+                <WindowChrome CaptionHeight="{Binding ActualHeight, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                              CornerRadius="0"
+                              GlassFrameThickness="1"
+                              NonClientFrameEdges="None"
+                              ResizeBorderThickness="0"
+                              UseAeroCaptionButtons="False" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Window}">
+                    <Border Background="{DynamicResource MaterialDesignPaper}"
+                            BorderBrush="#FF494949"
+                            BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="36" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="24" MaxHeight="24" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <controls:VerticalWrapContainer Grid.Row="0"
+                                                            Grid.RowSpan="2"
+                                                            Grid.Column="0"
+                                                            Margin="8,4">
+                                <TextBlock Grid.Row="0"
+                                           VerticalAlignment="Center"
+                                           AllowDrop="True"
+                                           Text="{Binding Title, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                           TextWrapping="WrapWithOverflow" />
+                            </controls:VerticalWrapContainer>
+                            <Button Grid.Row="0"
+                                    Grid.Column="1"
+                                    misc:CloseButtonBehavior.Invoke="True"
+                                    SnapsToDevicePixels="False"
+                                    Style="{StaticResource CloseButtonStyle}">
+                                <misc:PathDecorator.PathStyle>
+                                    <Style TargetType="{x:Type Path}">
+                                        <Setter Property="Data" Value="M 13,6 23,16 M 13,16 23,6" />
+                                    </Style>
+                                </misc:PathDecorator.PathStyle>
+                            </Button>
+                            <ContentPresenter Grid.Row="2"
+                                              Grid.Column="0"
+                                              Grid.ColumnSpan="2" />
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

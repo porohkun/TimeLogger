@@ -1,0 +1,65 @@
+﻿<UserControl x:Class="TimeLogger.Controls.TagsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:editors="http://wpfcontrols.com/"
+             xmlns:local="clr-namespace:TimeLogger.Controls"
+             xmlns:misc="clr-namespace:TimeLogger.Misc"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="100"
+             d:DesignWidth="300"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <misc:TagSuggestionProvider x:Key="LabelsProvider" />
+        <DataTemplate x:Key="StateTemplate">
+            <Grid>
+                <TextBlock Text="{Binding Path=Name}" />
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+    <DockPanel>
+        <local:ItemsControlWithCustomContainer VerticalAlignment="Stretch"
+                                               DockPanel.Dock="Left"
+                                               ItemsSource="{Binding Tags, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TagsControl}}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel IsItemsHost="True" Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Margin="2,0,0,0"
+                            Click="Button_Click"
+                            Content="{Binding Name}"
+                            Tag="{Binding Name}">
+                        <Button.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Click="ButtonPopup_Click" Header="Remove" />
+                            </ContextMenu>
+                        </Button.ContextMenu>
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </local:ItemsControlWithCustomContainer>
+        <editors:AutoCompleteTextBox x:Name="newTagBox"
+                                     MinWidth="80"
+                                     Margin="3,0"
+                                     HorizontalAlignment="Left"
+                                     CharacterCasing="Upper"
+                                     DisplayMember="Name"
+                                     DockPanel.Dock="Left"
+                                     ItemTemplate="{StaticResource ResourceKey=StateTemplate}"
+                                     Loaded="newTagBox_Loaded"
+                                     MaxLength="50"
+                                     Provider="{StaticResource ResourceKey=LabelsProvider}"
+                                     SelectionAdapterCommit="newTagBox_SelectionAdapterCommit"
+                                     Text="">
+            <editors:AutoCompleteTextBox.SelectedItem>
+                <Binding Mode="TwoWay"
+                         Path="SelectedState"
+                         UpdateSourceTrigger="PropertyChanged"
+                         ValidatesOnDataErrors="True" />
+            </editors:AutoCompleteTextBox.SelectedItem>
+        </editors:AutoCompleteTextBox>
+    </DockPanel>
+</UserControl>
