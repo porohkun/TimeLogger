@@ -4,7 +4,7 @@ using TimeLogger.MVVM;
 
 namespace TimeLogger.ViewModels
 {
-    /// <inheritdoc/>
+    /// <inheritdoc cref="INewActivityViewModel" />
     public class NewActivityViewModelDesignDummy : BindableBase, INewActivityViewModel
     {
         public long Id { get; } = 0;

@@ -7,7 +7,7 @@ using TimeLogger.MVVM;
 
 namespace TimeLogger.ViewModels
 {
-    /// <inheritdoc/>
+    /// <inheritdoc cref="ITagViewModel" />
     [AsTransient(typeof(ITagViewModel))]
     public class TagViewModel : BindableBase, ITagViewModel
     {

@@ -5,7 +5,7 @@ using TimeLogger.MVVM;
 
 namespace TimeLogger.ViewModels
 {
-    /// <inheritdoc/>
+    /// <inheritdoc cref="INewActivityViewModel" />
     [AsTransient(typeof(INewActivityViewModel))]
     public class NewActivityViewModel : BindableBase, INewActivityViewModel
     {

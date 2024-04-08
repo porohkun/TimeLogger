@@ -8,7 +8,7 @@ using TimeLogger.Views;
 
 namespace TimeLogger.ViewModels
 {
-    /// <inheritdoc/>
+    /// <inheritdoc cref="IMainWindowViewModel" />
     [AsSingletone(typeof(IMainWindowViewModel))]
     public class MainWindowViewModel : BindableBase, IMainWindowViewModel
     {
@@ -19,10 +19,10 @@ namespace TimeLogger.ViewModels
 
         public ObservableCollection<ITimeViewModel> Indicators { get; } = new()
         {
-            new TimeViewModel() { Name = "Today"},
-            new TimeViewModel() { Name = "Task"},
-            new TimeViewModel() { Name = "Task today"},
-            new TimeViewModel() { Name = "Period"}
+            new TimeViewModel { Name = "Today"},
+            new TimeViewModel { Name = "Task"},
+            new TimeViewModel { Name = "Task today"},
+            new TimeViewModel { Name = "Period"}
         };
 
         public ICommand ShowActivitiesCommand { get; }

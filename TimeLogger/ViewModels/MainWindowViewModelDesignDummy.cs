@@ -6,7 +6,7 @@ using TimeLogger.MVVM;
 
 namespace TimeLogger.ViewModels
 {
-    /// <inheritdoc/>
+    /// <inheritdoc cref="IMainWindowViewModel" />
     public class MainWindowViewModelDesignDummy : BindableBase, IMainWindowViewModel
     {
         public string ActivityName => "TSK-42 че-то там про главный вопрос туды-сюды";

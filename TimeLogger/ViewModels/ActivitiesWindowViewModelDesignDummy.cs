@@ -7,7 +7,7 @@ using TimeLogger.MVVM;
 
 namespace TimeLogger.ViewModels
 {
-    /// <inheritdoc/>
+    /// <inheritdoc cref="IActivitiesWindowViewModel" />
     public class ActivitiesWindowViewModelDesignDummy : BindableBase, IActivitiesWindowViewModel
     {
         public bool ShowArchived { get; set; }

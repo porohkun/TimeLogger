@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using TimeLogger.Abstractions;
@@ -8,11 +8,12 @@ using TimeLogger.MVVM;
 
 namespace TimeLogger.ViewModels
 {
+    /// <inheritdoc cref="IActivityViewModel"/>>
     [AsTransient(typeof(IActivityViewModel))]
     public class ActivityViewModel : BindableBase, IActivityViewModel
     {
+        private readonly IActivityService _activityService;
         private readonly Activity _activity;
-        private readonly Action<IActivityViewModel>? _selectActivityCallback;
 
         public long Id => _activity.Id;
         public string Key => _activity.Key ?? "<Null>";
@@ -34,16 +35,41 @@ namespace TimeLogger.ViewModels
 
         public ActivityViewModel(
             Activity activity,
-            Action<IActivityViewModel>? selectActivityCallback = null)
+            IActivityService activityService)
         {
+            _activityService = activityService;
             _activity = activity;
-            _selectActivityCallback = selectActivityCallback;
-            SelectCommand = new RelayCommand(SelectActivity);
+
+            _activityService.ActivityUpdated += _activityService_ActivityUpdated;
+
+            SelectCommand = new AsyncRelayCommand(SelectActivity);
+            ArchiveCommand = new AsyncRelayCommand(ArchiveActivity);
+            UnArchiveCommand = new AsyncRelayCommand(UnArchiveActivity);
         }
 
-        private void SelectActivity()
+        private void _activityService_ActivityUpdated(long id)
         {
-            _selectActivityCallback?.Invoke(this);
+            if (Id != id) return;
+
+            RaisePropertyChanged(nameof(Key));
+            RaisePropertyChanged(nameof(Name));
+            RaisePropertyChanged(nameof(Archived));
+            RaisePropertyChanged(nameof(Pinned));
+        }
+
+        private async Task SelectActivity()
+        {
+            await _activityService.SelectActivity(Id);
+        }
+
+        private async Task ArchiveActivity()
+        {
+            await _activityService.ArchiveActivity(Id, true);
+        }
+
+        private async Task UnArchiveActivity()
+        {
+            await _activityService.ArchiveActivity(Id, false);
         }
     }
 }

@@ -6,6 +6,7 @@ using TimeLogger.MVVM;
 
 namespace TimeLogger.ViewModels
 {
+    /// <inheritdoc cref="IActivityViewModel"/>>
     public class ActivityViewModelDummy : BindableBase, IActivityViewModel
     {
         private readonly Activity _activity;

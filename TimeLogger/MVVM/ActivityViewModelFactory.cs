@@ -11,9 +11,9 @@ namespace TimeLogger.MVVM
     {
         public ActivityViewModelFactory(IServiceProvider services) : base(services) { }
 
-        public IActivityViewModel Create(Activity activity, Action<IActivityViewModel>? selectActivityCallback = null)
+        public IActivityViewModel Create(Activity activity)
         {
-            return base.Create(activity, selectActivityCallback);
+            return base.Create(activity);
         }
     }
 }

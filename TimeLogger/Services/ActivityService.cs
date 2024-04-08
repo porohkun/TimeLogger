@@ -23,9 +23,10 @@ namespace TimeLogger.Services
         private Period? _selectedPeriod;
 
         public Activity? SelectedActivity { get; private set; }
-        public bool IsActivated => _selectedPeriod != null;
+        public bool IsStarted => _selectedPeriod != null;
 
         public event Action? ActivitySelected;
+        public event Action<long>? ActivityUpdated;
         public event Action<bool>? IsActivatedChanged;
 
         public ActivityService(
@@ -41,9 +42,10 @@ namespace TimeLogger.Services
 
             Task.Run(async () =>
             {
-                var selectedActivityId = (await _valuesService.Get<long>(Values.SelectedActivity));
+                var selectedActivityId = await _valuesService.Get<long>(Values.SelectedActivity);
                 await SelectActivity(selectedActivityId);
 
+                // все начатые периоды
                 var periods = (await _periodsRepository
                    .GetAllAsync(q => q
                        .Where(p => p.IsActive)
@@ -51,22 +53,28 @@ namespace TimeLogger.Services
                        .IgnoreAutoIncludes()))
                    .ToArray();
 
+                // убрать период текущей активности
                 if (periods.Any())
                 {
                     if (SelectedActivity is not null)
                     {
-                        _selectedPeriod = periods.Where(p => p.OwnerId == selectedActivityId).FirstOrDefault();
-                        periods = periods.Except(new[] { _selectedPeriod }).Cast<Period>().ToArray();
+                        _selectedPeriod = periods.FirstOrDefault(p => p.OwnerId == selectedActivityId);
+                        periods = periods
+                            .Except(new[] { _selectedPeriod })
+                            .Select(p => p!)
+                            .ToArray();
                     }
-                    if (periods.Any())
+                }
+
+                // завершить все остальные периоды
+                if (periods.Any())
+                {
+                    foreach (var period in periods)
                     {
-                        foreach (var period in periods)
-                        {
-                            period.End = period.Start;
-                            await _periodsRepository.UpdateAsync(period, false);
-                        }
-                        await _periodsRepository.CommitAsync();
+                        period.End = period.Start;
+                        await _periodsRepository.UpdateAsync(period, false);
                     }
+                    await _periodsRepository.CommitAsync();
                 }
             });
         }
@@ -89,12 +97,13 @@ namespace TimeLogger.Services
             activity.Key = key;
             activity.Name = name;
             await _activityRepository.UpdateAsync(activity);
+            ActivityUpdated?.Invoke(id);
             return id;
         }
 
         public async Task SelectActivity(long id)
         {
-            if (IsActivated)
+            if (IsStarted)
                 await StopActivity(SelectedActivity!.Id);
 
             var activity = await _activityRepository.GetByIdAsync(id, q => q.IgnoreAutoIncludes());
@@ -110,6 +119,19 @@ namespace TimeLogger.Services
         public async Task StopActivity(long id)
         {
 
+        }
+
+        public async Task ArchiveActivity(long id, bool archive)
+        {
+            if (IsStarted && _selectedPeriod!.OwnerId == id)
+                await StopActivity(id);
+
+            var activity = await _activityRepository.GetByIdAsync(id);
+            if (activity == null)
+                return;
+            activity.Archived = archive;
+            await _activityRepository.UpdateAsync(activity);
+            ActivityUpdated?.Invoke(id);
         }
     }
 }

@@ -23,6 +23,9 @@
          <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="{x:Type Button}">
              <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
          </Style>
+        <Style BasedOn="{StaticResource {x:Type ToggleButton}}" TargetType="{x:Type ToggleButton}">
+            <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+        </Style>
     </Window.Resources>
     <materialDesign:DialogHost DialogMargin="8"
                                Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
@@ -38,8 +41,8 @@
                           <RowDefinition Height="Auto"/>
                       </Grid.RowDefinitions>
                       
-                      <TextBlock Grid.Column="0" Text="Key" />
-                      <TextBlock Grid.Column="1" Text="Name" />
+                      <TextBlock Grid.Column="0" Grid.Row="0" Text="Key" />
+                      <TextBlock Grid.Column="1" Grid.Row="0" Text="Name" />
                       <TextBox Grid.Column="0" Grid.Row="1"
                                Margin="2,0"
                                WindowChrome.IsHitTestVisibleInChrome="True"
@@ -74,23 +77,15 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <DockPanel Grid.Column="0" Margin="5,5,0,5">
-                <Grid DockPanel.Dock="Top">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <ToggleButton Grid.Column="0"
-                                  Content="Active"
-                                  IsChecked="{Binding ShowArchive, Converter={StaticResource ReverseBool}}" />
-                    <ToggleButton Grid.Column="1"
-                                  Content="Archived"
-                                  IsChecked="{Binding ShowArchive}" />
-                </Grid>
+                <DockPanel Margin="5" DockPanel.Dock="Top" LastChildFill="True">
+                    <ToggleButton DockPanel.Dock="Right" IsChecked="{Binding ShowArchived}"/>
+                    <TextBlock Text="Show archived"/>
+                </DockPanel>
                 <Button Margin="5"
                         Content="New task"
                         DockPanel.Dock="Top"
                         Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
-                        Visibility="{Binding ShowArchive, Converter={StaticResource ReverseBoolToVis}}" />
+                        Visibility="{Binding ShowArchived, Converter={StaticResource ReverseBoolToVis}}" />
                 <ListBox HorizontalContentAlignment="Stretch"
                          WindowChrome.IsHitTestVisibleInChrome="True"
                          ItemsSource="{Binding Tags, Mode=OneWay}">

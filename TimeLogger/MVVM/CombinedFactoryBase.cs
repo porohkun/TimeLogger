@@ -6,6 +6,7 @@ namespace TimeLogger.MVVM
     public abstract class CombinedFactoryBase<T>
     {
         private readonly IServiceProvider _services;
+
         public CombinedFactoryBase(IServiceProvider services)
         {
             _services = services;

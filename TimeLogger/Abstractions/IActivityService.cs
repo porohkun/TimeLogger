@@ -13,6 +13,7 @@ namespace TimeLogger.Abstractions
         Activity? SelectedActivity { get; }
 
         event Action? ActivitySelected;
+        event Action<long>? ActivityUpdated;
 
         Task<long> CreateNewActivity(string key, string name, IEnumerable<string> tags);
 
@@ -23,5 +24,7 @@ namespace TimeLogger.Abstractions
         Task StartActivity(long id);
 
         Task StopActivity(long id);
+
+        Task ArchiveActivity(long id, bool archive);
     }
 }

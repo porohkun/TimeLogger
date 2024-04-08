@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
@@ -15,7 +17,7 @@ using Activity = TimeLogger.Domain.Data.Activity;
 
 namespace TimeLogger.ViewModels
 {
-    /// <inheritdoc/>
+    /// <inheritdoc cref="IActivitiesWindowViewModel" />
     [AsSingletone(typeof(IActivitiesWindowViewModel))]
     public class ActivitiesWindowViewModel : BindableBase, IActivitiesWindowViewModel
     {
@@ -27,6 +29,8 @@ namespace TimeLogger.ViewModels
         private readonly IRepository<Activity> _activitiesRepo;
         private readonly IRepository<Tag> _tagsRepo;
 
+        private readonly ICollectionView _activitiesView;
+
         private bool _showArchived = false;
         private bool _showNewTaskPane = false;
         private IActivityViewModel? _selectedActivity;
@@ -34,8 +38,13 @@ namespace TimeLogger.ViewModels
         public bool ShowArchived
         {
             get => _showArchived;
-            set => SetProperty(ref _showArchived, value);
+            set
+            {
+                if (SetProperty(ref _showArchived, value))
+                    _activitiesView.Refresh();
+            }
         }
+
         public bool ShowNewTaskPane
         {
             get => _showNewTaskPane;
@@ -75,12 +84,22 @@ namespace TimeLogger.ViewModels
             _tagsRepo = tagsRepo;
 
             _activityService.ActivitySelected += () => CloseCommand?.Execute(null);
+            _activityService.ActivityUpdated += _ => _activitiesView?.Refresh();
 
             CreateNewActivityCommand = new AsyncRelayCommand(CreateNewActivity);
             CancelNewActivityCommand = new RelayCommand(CancelNewActivity);
             EditActivityCommand = new AsyncRelayCommand<IActivityViewModel>(EditActivity);
-            SelectActivityCommand = new RelayCommand<IActivityViewModel>(SelectActivity);
+            SelectActivityCommand = new AsyncRelayCommand<IActivityViewModel>(SelectActivity);
             CloseCommand = new RelayCommand(_windowsService.Hide<ActivitiesWindow>);
+
+            _activitiesView = (CollectionView)CollectionViewSource.GetDefaultView(Activities);
+            _activitiesView.Filter = a =>
+            {
+                if (!(a is IActivityViewModel activity)) return false;
+                if (ShowArchived != activity.Archived)
+                    return false;
+                return true;
+            };
 
             Task.Run(LoadActivities);
         }
@@ -88,7 +107,7 @@ namespace TimeLogger.ViewModels
         private async void LoadActivities()
         {
             var activities = (await _activitiesRepo.GetAllAsync())
-                .Select(a => _activityFactory.Create(a, SelectActivity))
+                .Select(a => _activityFactory.Create(a))
                 .ToArray();
             var tags = (await _tagsRepo.GetAllAsync()).Select(_tagFactory.Create).ToArray();
             await _dispatcherService.InvokeAsync(() => Activities.AddRange(activities));
@@ -97,14 +116,26 @@ namespace TimeLogger.ViewModels
 
         private async Task CreateNewActivity()
         {
-            var id = EditingActivity.Id != 0
-                ? await _activityService.UpdateActivity(EditingActivity.Id, EditingActivity.Key, EditingActivity.Name, Array.Empty<string>())
-                : await _activityService.CreateNewActivity(EditingActivity.Key, EditingActivity.Name, Array.Empty<string>());
-            var activity = await _activitiesRepo.GetByIdAsync(id);
-            var activityView = _activityFactory.Create(activity!, SelectActivity);
-            Activities.RemoveWhere(a => a.Id == id);
-            Activities.Add(activityView);
-            SelectedActivity = activityView;
+            var id = EditingActivity.Id;
+            if (EditingActivity.Id != 0)
+                await _activityService.UpdateActivity(
+                    EditingActivity.Id,
+                    EditingActivity.Key,
+                    EditingActivity.Name,
+                    Array.Empty<string>());
+            else
+            {
+                id = await _activityService.CreateNewActivity(
+                     EditingActivity.Key,
+                     EditingActivity.Name,
+                     Array.Empty<string>());
+                var activity = await _activitiesRepo.GetByIdAsync(id);
+                var activityView = _activityFactory.Create(activity!);
+                Activities.Add(activityView);
+            }
+
+            SelectedActivity = Activities.FirstOrDefault(a => a.Id == id);
+
             CancelNewActivity();
         }
 
@@ -123,10 +154,10 @@ namespace TimeLogger.ViewModels
             DialogHost.CloseDialogCommand.Execute(true, null);
         }
 
-        private void SelectActivity(IActivityViewModel? activityViewModel)
+        private async Task SelectActivity(IActivityViewModel? activityViewModel)
         {
             if (activityViewModel is null) return;
-            _activityService.SelectActivity(activityViewModel.Id);
+            await _activityService.SelectActivity(activityViewModel.Id);
         }
     }
 }
