@@ -23,11 +23,21 @@ namespace TimeLogger.Services
         private Period? _selectedPeriod;
 
         public Activity? SelectedActivity { get; private set; }
-        public bool IsStarted => _selectedPeriod != null;
+
+        public Period? SelectedPeriod
+        {
+            get => _selectedPeriod;
+            private set
+            {
+                _selectedPeriod = value;
+                IsStartedChanged?.Invoke(IsStarted);
+            }
+        }
+        public bool IsStarted => SelectedPeriod != null;
 
         public event Action? ActivitySelected;
         public event Action<long>? ActivityUpdated;
-        public event Action<bool>? IsActivatedChanged;
+        public event Action<bool>? IsStartedChanged;
 
         public ActivityService(
             IRepository<Activity> activityRepository,
@@ -48,7 +58,7 @@ namespace TimeLogger.Services
                 // все начатые периоды
                 var periods = (await _periodsRepository
                    .GetAllAsync(q => q
-                       .Where(p => p.IsActive)
+                       .Where(Period.IsActivePredicate)
                        .OrderByDescending(p => p.Start)
                        .IgnoreAutoIncludes()))
                    .ToArray();
@@ -58,9 +68,9 @@ namespace TimeLogger.Services
                 {
                     if (SelectedActivity is not null)
                     {
-                        _selectedPeriod = periods.FirstOrDefault(p => p.OwnerId == selectedActivityId);
+                        SelectedPeriod = periods.FirstOrDefault(p => p.OwnerId == selectedActivityId);
                         periods = periods
-                            .Except(new[] { _selectedPeriod })
+                            .Except(new[] { SelectedPeriod })
                             .Select(p => p!)
                             .ToArray();
                     }
@@ -81,7 +91,7 @@ namespace TimeLogger.Services
 
         public async Task<long> CreateNewActivity(string key, string name, IEnumerable<string> tags)
         {
-            var id = await _activityRepository.AddAsync(new Activity()
+            var id = await _activityRepository.AddAsync(new Activity
             {
                 Key = key,
                 Name = name,
@@ -107,23 +117,62 @@ namespace TimeLogger.Services
                 await StopActivity(SelectedActivity!.Id);
 
             var activity = await _activityRepository.GetByIdAsync(id, q => q.IgnoreAutoIncludes());
+            await _valuesService.Set(Values.SelectedActivity, activity?.Id ?? 0);
             SelectedActivity = activity;
             ActivitySelected?.Invoke();
         }
 
         public async Task StartActivity(long id)
         {
+            if (IsStarted)
+                await StopActivity(SelectedActivity!.Id);
 
+            if (await _activityRepository.GetByIdAsync(id, q => q.IgnoreAutoIncludes()) is null)
+                return;
+
+            var period = new Period
+            {
+                OwnerId = id,
+                Start = DateTime.UtcNow,
+            };
+            await _periodsRepository.AddAsync(period);
+
+            SelectedPeriod = period;
         }
 
         public async Task StopActivity(long id)
         {
+            if (await _activityRepository.GetByIdAsync(id, q => q.IgnoreAutoIncludes()) is null)
+                return;
 
+            var periods = await _periodsRepository.GetAllAsync(q => q
+                .Where(p => p.OwnerId == id)
+                .Where(Period.IsActivePredicate)
+                .OrderBy(p => p.Start));
+            Period? period = null;
+            foreach (var per in periods)
+            {
+                if (period is null)
+                    period = per;
+                else
+                {
+                    period.End = per.Start;
+                    await _periodsRepository.UpdateAsync(period, false);
+                }
+            }
+
+            if (period is not null)
+            {
+                period.End = DateTime.UtcNow;
+                await _periodsRepository.UpdateAsync(period);
+            }
+
+            SelectedPeriod = null;
         }
 
         public async Task ArchiveActivity(long id, bool archive)
         {
-            if (IsStarted && _selectedPeriod!.OwnerId == id)
+            if (IsStarted && SelectedPeriod!.OwnerId == id)
                 await StopActivity(id);
 
             var activity = await _activityRepository.GetByIdAsync(id);

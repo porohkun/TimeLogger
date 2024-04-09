@@ -11,6 +11,10 @@ namespace TimeLogger.ViewModels
     {
         public string ActivityName => "TSK-42 че-то там про главный вопрос туды-сюды";
 
+        public bool ActivitySelected => true;
+
+        public bool ActivityStarted => false;
+
         public ObservableCollection<ITimeViewModel> Indicators { get; } = new()
         {
             new TimeViewModel() { Name = "Today"},
@@ -21,5 +25,8 @@ namespace TimeLogger.ViewModels
 
         public ICommand ShowActivitiesCommand => throw new NotImplementedException();
 
+        public ICommand StartActivityCommand => throw new NotImplementedException();
+
+        public ICommand StopActivityCommand => throw new NotImplementedException();
     }
 }

@@ -12,8 +12,11 @@ namespace TimeLogger.Abstractions
     {
         Activity? SelectedActivity { get; }
 
+        bool IsStarted { get; }
+
         event Action? ActivitySelected;
         event Action<long>? ActivityUpdated;
+        event Action<bool>? IsStartedChanged;
 
         Task<long> CreateNewActivity(string key, string name, IEnumerable<string> tags);
 

@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -44,8 +43,8 @@ namespace TimeLogger.DataAccess.Migrations
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Start = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    End = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Start = table.Column<DateTime>(type: "INTEGER", nullable: false),
+                    End = table.Column<DateTime>(type: "INTEGER", nullable: false),
                     OwnerId = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>

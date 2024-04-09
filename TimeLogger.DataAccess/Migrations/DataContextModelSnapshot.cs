@@ -62,13 +62,13 @@ namespace TimeLogger.DataAccess.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("End")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<long>("OwnerId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Start")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

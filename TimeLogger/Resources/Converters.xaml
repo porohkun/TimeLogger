@@ -5,6 +5,7 @@
     <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
     <c:ReverseBooleanConverter x:Key="ReverseBool" />
     <c:BooleanAndConverter x:Key="BoolAndConverter" />
+    <c:BooleanOrConverter x:Key="BoolOrConverter" />
     <c:BooleanToColorArchivedConverter x:Key="BoolToColor" />
     <c:ReverseBooleanToVisibilityConverter x:Key="ReverseBoolToVis" />
     <c:SelectValueByBoolConverter x:Key="ValByBoolConverter" />

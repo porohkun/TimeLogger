@@ -4,17 +4,17 @@ using System.Windows.Data;
 
 namespace TimeLogger.Converters
 {
-    public class BooleanAndConverter : IMultiValueConverter
+    public class BooleanOrConverter : IMultiValueConverter
     {
         public object? Convert(object?[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             return values
                 .Select(value => (value as bool?) ?? false)
-                .All(val => val);
+                .Any(val => val);
         }
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)
         {
-            throw new NotSupportedException("BooleanAndConverter is a one way converter.");
+            throw new NotSupportedException("BooleanOrConverter is a one way converter.");
         }
     }
 }

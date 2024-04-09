@@ -21,16 +21,16 @@ namespace TimeLogger.Services
 
         public async Task<T?> Get<T>(string name)
         {
-            var value = await _valuesRepository.Query(q => q.Where(v => v.Name == name).FirstOrDefault());
-            if (value == null || value.Caption is null)
-                return default(T);
-            return JsonConvert.DeserializeObject<T>(value.Caption);
+            var value = await _valuesRepository.Query(q => q.FirstOrDefault(v => v.Name == name));
+            return value?.Caption is null
+                ? default
+                : JsonConvert.DeserializeObject<T>(value.Caption);
         }
 
         public async Task Set(string name, object value)
         {
-            var val = await _valuesRepository.Query(q => q.Where(v => v.Name == name).FirstOrDefault())
-                ?? new Value() { Name = name };
+            var val = await _valuesRepository.Query(q => q.FirstOrDefault(v => v.Name == name))
+                ?? new Value { Name = name };
             val.Caption = JsonConvert.SerializeObject(value);
             await _valuesRepository.AddOrUpdateAsync(val);
         }

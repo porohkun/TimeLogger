@@ -80,15 +80,26 @@
                     Command="{Binding ShowActivitiesCommand}"
                     Content="{materialDesign:PackIcon Size=24,
                                                       Kind=ViewList}" />
+
             <Button Grid.Row="0"
                     Grid.Column="1"
+                    Command="{Binding StopActivityCommand}"
+                    IsEnabled="{Binding ActivityStarted}"
                     Content="{materialDesign:PackIcon Size=24,
                                                       Kind=Pause}" />
+            
             <Button Grid.Row="0"
                     Grid.Column="2"
-                    IsEnabled="False"
-                    Content="{materialDesign:PackIcon Size=24,
-                                                      Kind=Play}" />
+                    Command="{Binding StartActivityCommand}"
+                    Content="{materialDesign:PackIcon Size=24, Kind=Play}" >
+                <Button.IsEnabled>
+                    <MultiBinding Converter="{StaticResource BoolAndConverter}">
+                        <Binding Path="ActivitySelected"/>
+                        <Binding Path="ActivityStarted" Converter="{StaticResource ReverseBool}"/>
+                    </MultiBinding>
+                </Button.IsEnabled>
+            </Button>
+
             <Button Grid.Row="1"
                     Grid.Column="0"
                     Content="{materialDesign:PackIcon Size=24,
