@@ -11,6 +11,7 @@ namespace TimeLogger.Abstractions
     public interface IActivityService
     {
         Activity? SelectedActivity { get; }
+        Period? SelectedPeriod { get; }
 
         bool IsStarted { get; }
 

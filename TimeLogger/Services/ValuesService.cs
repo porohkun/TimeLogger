@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using TimeLogger.Abstractions;
@@ -21,10 +22,17 @@ namespace TimeLogger.Services
 
         public async Task<T?> Get<T>(string name)
         {
-            var value = await _valuesRepository.Query(q => q.FirstOrDefault(v => v.Name == name));
-            return value?.Caption is null
-                ? default
-                : JsonConvert.DeserializeObject<T>(value.Caption);
+            try
+            {
+                var value = await _valuesRepository.Query(q => q.FirstOrDefault(v => v.Name == name));
+                return value?.Caption is null
+                    ? default
+                    : JsonConvert.DeserializeObject<T>(value.Caption);
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
 
         public async Task Set(string name, object value)

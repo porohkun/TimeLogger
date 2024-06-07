@@ -9,9 +9,9 @@ namespace TimeLogger.Domain.Data
     {
         public DateTime Start { get; set; } = DateTime.UnixEpoch;
         public DateTime End { get; set; } = DateTime.UnixEpoch;
-        public bool IsActive => IsActivePredicate.Compile().Invoke(this);
+        public bool IsActive => End < Start;
 
-        public static readonly Expression<Func<Period, bool>> IsActivePredicate = p => p.End < p.Start;
+        public static readonly Expression<Func<Period, bool>> IsActivePredicate = e => e.End < e.Start;
 
         public class Configuration : IEntityTypeConfiguration<Period>
         {

@@ -86,6 +86,7 @@ namespace TimeLogger.Services
                     }
                     await _periodsRepository.CommitAsync();
                 }
+                ActivitySelected?.Invoke();
             });
         }
 
@@ -158,6 +159,7 @@ namespace TimeLogger.Services
                 {
                     period.End = per.Start;
                     await _periodsRepository.UpdateAsync(period, false);
+                    period = per;
                 }
             }
 

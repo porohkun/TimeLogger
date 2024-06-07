@@ -7,7 +7,7 @@ namespace TimeLogger.MVVM
     {
         private readonly IServiceProvider _services;
 
-        public CombinedFactoryBase(IServiceProvider services)
+        protected CombinedFactoryBase(IServiceProvider services)
         {
             _services = services;
         }

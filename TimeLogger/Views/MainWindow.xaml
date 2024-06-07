@@ -22,9 +22,12 @@
         Style="{StaticResource {x:Type Window}}"
         mc:Ignorable="d">
     <Window.Resources>
-         <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="{x:Type Button}">
-             <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
-         </Style>
+        <Style BasedOn="{StaticResource {x:Type TextBlock}}"
+               TargetType="{x:Type TextBlock}"
+               x:Key="MyTextBlockStyle"/>
+        <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="{x:Type Button}">
+            <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+        </Style>
         <Style BasedOn="{StaticResource {x:Type ListView}}" TargetType="{x:Type ListView}" x:Key="IndicatorsList">
             <Setter Property="materialDesign:ListViewAssist.ListViewItemPadding" Value="1" />
             <Setter Property="Grid.IsSharedSizeScope" Value="True" />
@@ -44,7 +47,7 @@
                                 <ColumnDefinition Width="Auto" SharedSizeGroup="time" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="{Binding Name}" />
-                            <TextBlock Grid.Column="1" Text="{Binding Time}" />
+                            <TextBlock Grid.Column="1" Text="{Binding Time, StringFormat=d\\ hh\\:mm\\:ss}" />
                         </Grid>
                     </DataTemplate>
                 </Setter.Value>
@@ -123,13 +126,21 @@
                 <Border Background="{DynamicResource MaterialDesignPaper}"
                         BorderBrush="#FF494949"
                         BorderThickness="1">
-                    <Grid>
+                    <Grid MaxWidth="230">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Text="{Binding TaskName}" />
-                        <ListView Grid.Row="1" ItemsSource="{Binding Indicators}" Style="{StaticResource IndicatorsList}"/>
+                        <TextBlock Grid.Row="0"
+                                   Margin="5"
+                                   AllowDrop="True"
+                                   TextWrapping="WrapWithOverflow"
+                                   Text="{Binding ActivityName}"
+                                   Style="{StaticResource MaterialDesignTextBlock}"
+                                   Foreground="{StaticResource MaterialDesignDarkForeground}"/>
+                        <ListView Grid.Row="1"
+                                  ItemsSource="{Binding Indicators}"
+                                  Style="{StaticResource IndicatorsList}"/>
                     </Grid>
                 </Border>
             </tb:TaskbarIcon.TrayToolTip>

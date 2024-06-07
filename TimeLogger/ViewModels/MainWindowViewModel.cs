@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
@@ -22,20 +23,17 @@ namespace TimeLogger.ViewModels
 
         public bool ActivityStarted => _activityService.IsStarted;
 
-        public ObservableCollection<ITimeViewModel> Indicators { get; } = new()
-        {
-            new TimeViewModel { Name = "Today"},
-            new TimeViewModel { Name = "Task"},
-            new TimeViewModel { Name = "Task today"},
-            new TimeViewModel { Name = "Period"}
-        };
+        public ObservableCollection<ITimeViewModel> Indicators { get; } = new();
 
         public ICommand ShowActivitiesCommand { get; }
         public ICommand StartActivityCommand { get; }
         public ICommand StopActivityCommand { get; }
 
-        public MainWindowViewModel(IWindowsService windowsService, IActivityService activityService)
-            : base()
+        public MainWindowViewModel(
+            IWindowsService windowsService,
+            IActivityService activityService,
+            IIndicatorsService indicatorsService,
+            TimeViewModelFactory timeViewModelFactory)
         {
             _windowsService = windowsService;
             _activityService = activityService;
@@ -46,6 +44,12 @@ namespace TimeLogger.ViewModels
                 RaisePropertyChanged(nameof(ActivitySelected));
             };
             _activityService.IsStartedChanged += _ => RaisePropertyChanged(nameof(ActivityStarted));
+
+            indicatorsService.IndicatorsChanged += () =>
+            {
+                Indicators.Clear();
+                Indicators.AddRange(indicatorsService.IndicatorsNames.Select(timeViewModelFactory.Create));
+            };
 
             ShowActivitiesCommand = new RelayCommand(ShowActivities);
             StartActivityCommand = new AsyncRelayCommand(StartActivity);

@@ -17,10 +17,10 @@ namespace TimeLogger.ViewModels
 
         public ObservableCollection<ITimeViewModel> Indicators { get; } = new()
         {
-            new TimeViewModel() { Name = "Today"},
-            new TimeViewModel() { Name = "Task"},
-            new TimeViewModel() { Name = "Task today"},
-            new TimeViewModel() { Name = "Period"}
+            new TimeViewModelDesignDummy { Name = "Today", Time = new TimeSpan(1, 15, 36)},
+            new TimeViewModelDesignDummy { Name = "Task", Time = new TimeSpan(1, 3, 10, 15, 327)},
+            new TimeViewModelDesignDummy { Name = "Task today", Time = new TimeSpan(0, 0, 15)},
+            new TimeViewModelDesignDummy { Name = "Period", }
         };
 
         public ICommand ShowActivitiesCommand => throw new NotImplementedException();
